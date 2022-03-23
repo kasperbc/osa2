@@ -29,6 +29,7 @@ public class PlayerShoot : MonoBehaviour
 
     void Shoot()
     {
-        Instantiate(shell, gunModel.transform.position, gunModel.transform.rotation);
+        Vector3 spawnPos = gunModel.transform.position + gunModel.transform.forward;
+        Instantiate(shell, spawnPos, gunModel.transform.rotation);
     }
 }

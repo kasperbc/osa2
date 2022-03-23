@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float moveSpeed;    // How fast the player moves
     [SerializeField]
+    private float turnSpeed;    // How fast the player turns
+    [SerializeField]
     private GameObject playerModel;  // The player model that's used for rotation
     void Start()
     {
@@ -19,13 +21,7 @@ public class PlayerMovement : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector3 direction = new Vector3(horizontal, 0, vertical);
-
-        if (direction != Vector3.zero)
-        {
-            playerModel.transform.rotation = Quaternion.Slerp(playerModel.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 20);
-        }
-
-        transform.Translate(direction * moveSpeed * Time.deltaTime);
+        transform.Translate(vertical * moveSpeed * Time.deltaTime * Vector3.forward);
+        transform.Rotate(horizontal * Time.deltaTime * turnSpeed * Vector3.up);
     }
 }
