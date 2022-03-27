@@ -21,7 +21,15 @@ public class PlayerMovement : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
+        bool boost = Input.GetKey(KeyCode.LeftShift);
+
+        if (boost)
+        {
+            horizontal *= 1.5f;
+            vertical *= 1.5f;
+        }
+
         transform.Translate(vertical * moveSpeed * Time.deltaTime * Vector3.forward);
-        transform.Rotate(horizontal * Time.deltaTime * turnSpeed * Vector3.up);
+        transform.Rotate(horizontal * Time.deltaTime * (turnSpeed * Mathf.Clamp(Mathf.Abs(vertical), 0.5f, 1)) * Vector3.up);
     }
 }
