@@ -6,9 +6,17 @@ public class PlayerShoot : MonoBehaviour
 {
     [SerializeField]
     GameObject gunModel;    // The gun model of the tank
+    GameObject barrel;      // The gun barrel
     [SerializeField]
     private GameObject shell;   // The shell that the tank fires
-    // Update is called once per frame
+
+    private bool onCooldown;    // Is the tank fire on cooldown/reloading?
+
+    void Start()
+    {
+        barrel = gunModel.transform.GetChild(0).gameObject;
+    }
+
     void Update()
     {
         // Get the mouse position
@@ -29,8 +37,29 @@ public class PlayerShoot : MonoBehaviour
 
     void Shoot()
     {
+        // Check if barrel on cooldown, don't fire if yes
+        if (onCooldown)
+        {
+            return;
+        }
+
+        // Activate cooldown
+        onCooldown = true;
+        Invoke("DeactivateCooldown", 0.5f);
+
+        // Fire the shell
         Vector3 spawnPos = gunModel.transform.position + gunModel.transform.forward * 2;
         GameObject spawnedShell = Instantiate(shell, spawnPos, gunModel.transform.rotation);
         spawnedShell.GetComponent<Rigidbody>().AddForce((spawnPos - gunModel.transform.position) * 20, ForceMode.Impulse);
+
+        // Play animation
+        barrel.GetComponent<Animator>().SetTrigger("Fire");
+        barrel.GetComponent<ParticleSystem>().Play();
+
+    }
+
+    void DeactivateCooldown()
+    {
+        onCooldown = false;
     }
 }
