@@ -56,6 +56,8 @@ public class PlayerShoot : MonoBehaviour
         barrel.GetComponent<Animator>().SetTrigger("Fire");
         barrel.GetComponent<ParticleSystem>().Play();
 
+        // Play reload animation
+        GameObject.Find("ReloadBar").GetComponent<Animator>().SetTrigger("Reload");
     }
 
     void DeactivateCooldown()
