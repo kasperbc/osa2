@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class ShellBehaviour : MonoBehaviour
 {
-    public float moveSpeed = 20;
-    void Update()
+    [SerializeField]
+    GameObject explosion;
+    private void OnCollisionEnter(Collision collision)
     {
-        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+        Instantiate(explosion, transform.position, transform.rotation);
+
+        Destroy(gameObject);
     }
 }

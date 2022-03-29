@@ -29,7 +29,8 @@ public class PlayerShoot : MonoBehaviour
 
     void Shoot()
     {
-        Vector3 spawnPos = gunModel.transform.position + gunModel.transform.forward;
-        Instantiate(shell, spawnPos, gunModel.transform.rotation);
+        Vector3 spawnPos = gunModel.transform.position + gunModel.transform.forward * 2;
+        GameObject spawnedShell = Instantiate(shell, spawnPos, gunModel.transform.rotation);
+        spawnedShell.GetComponent<Rigidbody>().AddForce((spawnPos - gunModel.transform.position) * 20, ForceMode.Impulse);
     }
 }
