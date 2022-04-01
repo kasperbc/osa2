@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isBoosting;    // Is the player boosting?
     private float boostMeter;   // How much the player can use the boost ability
     private bool boostDepleted;   // Has the boost been depleted?
+
+    [SerializeField] bool p2;
     void Start()
     {
         boostMeter = 5;
@@ -21,9 +23,30 @@ public class PlayerMovement : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {   
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+
+        if (!p2)
+        {
+            horizontal = 0;
+            vertical = 0;
+            if (Input.GetKey(KeyCode.Mouse1))
+            {
+                vertical = 1;
+            }
+            if (Input.GetKey(KeyCode.O))
+            {
+                horizontal = -1;
+            }
+            else if (Input.GetKey(KeyCode.P))
+            {
+                horizontal = 1;
+            }
+        }
+
+        transform.Translate(vertical * moveSpeed * Time.deltaTime * Vector3.forward);
+        transform.Rotate(horizontal * Time.deltaTime * (turnSpeed * Mathf.Clamp(Mathf.Abs(vertical), 0.5f, 1)) * Vector3.up);
 
         //
         // BOOST ABILITY
@@ -71,11 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Show the boost meter on the boost bar
         boostBar.fillAmount = boostMeter / 5;
-        GameObject.Find("BoostValue").GetComponent<Text>().text = Mathf.Round(boostMeter / 5 * 100).ToString() + "%";
-
-        transform.Translate(vertical * moveSpeed * Time.deltaTime * Vector3.forward);
-        transform.Rotate(horizontal * Time.deltaTime * (turnSpeed * Mathf.Clamp(Mathf.Abs(vertical), 0.5f, 1)) * Vector3.up);
-    }
+        GameObject.Find("BoostValue").GetComponent<Text>().text = Mathf.Round(boostMeter / 5 * 100).ToString() + "%";    }
 
     void DepleteBoost()
     {

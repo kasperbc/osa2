@@ -29,6 +29,13 @@ public class ShellBehaviour : MonoBehaviour
         {
             other.gameObject.GetComponent<BallBehaviour>().KnockBall(transform.position, 1, 1);
         }
+        else if (other.gameObject.CompareTag("Player"))
+        {
+            Vector3 hitDirection = (transform.position - other.transform.position).normalized;
+            hitDirection.y *= 1.5f;
+
+            other.gameObject.GetComponent<Rigidbody>().AddForce(hitDirection * 20, ForceMode.Impulse);
+        }
 
         Destroy(gameObject);
     }

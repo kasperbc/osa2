@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Cinemachine;
 public class PlayerShoot : MonoBehaviour
 {
     [SerializeField]
@@ -9,8 +9,11 @@ public class PlayerShoot : MonoBehaviour
     GameObject barrel;      // The gun barrel
     [SerializeField]
     private GameObject shell;   // The shell that the tank fires
-
+    [SerializeField]
+    Camera cam;                 // The camera that is following the player
     private bool onCooldown;    // Is the tank fire on cooldown/reloading?
+    [SerializeField] bool p2;   // Is the tank player 2?
+    public GameObject reloadBar;    // The reload UI circle
 
     void Start()
     {
@@ -19,20 +22,60 @@ public class PlayerShoot : MonoBehaviour
 
     void Update()
     {
+        KeyCode fireKey = KeyCode.Mouse0;
+
+        if (p2)
+        {
+            fireKey = KeyCode.Space;
+            KeyboardAim();
+        }
+        else
+        {
+            MouseAim();
+        }
+
+
+        // Check if fire button pressed
+        if (Input.GetKeyDown(fireKey))
+        {
+            Shoot();
+        }
+    }
+
+    void MouseAim()
+    {
         // Get the mouse position
-        Ray mouseWorldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray mouseWorldRay = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(mouseWorldRay, out RaycastHit hit))
         {
             // If the mouse hits anything, look towards the mouse
             Vector3 direction = hit.point - transform.position;
             gunModel.transform.rotation = Quaternion.Slerp(gunModel.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 20);
         }
+    }
 
-        // Check if fire button pressed
-        if (Input.GetButtonDown("Fire1"))
+    void KeyboardAim()
+    {
+        Vector3 direction = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.UpArrow))
+            direction.x = -35;
+        if (Input.GetKey(KeyCode.LeftArrow))
+            direction.y = -45;
+        else if (Input.GetKey(KeyCode.RightArrow))
+            direction.y = 45;
+        else if (!Input.GetKey(KeyCode.RightArrow) || !Input.GetKey(KeyCode.LeftArrow))
+            direction.y = 0;
+
+        if (Input.GetKey(KeyCode.DownArrow))
         {
-            Shoot();
+            direction.y /= 2;
+            direction.x /= 2;
         }
+
+        direction += transform.rotation.eulerAngles;
+
+        gunModel.transform.rotation = Quaternion.Euler(direction);
     }
 
     void Shoot()
@@ -57,7 +100,7 @@ public class PlayerShoot : MonoBehaviour
         barrel.GetComponent<ParticleSystem>().Play();
 
         // Play reload animation
-        GameObject.Find("ReloadBar").GetComponent<Animator>().SetTrigger("Reload");
+        reloadBar.GetComponent<Animator>().SetTrigger("Reload");
     }
 
     void DeactivateCooldown()
