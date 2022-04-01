@@ -27,11 +27,7 @@ public class ShellBehaviour : MonoBehaviour
 
         if (other.gameObject.CompareTag("Ball"))
         {
-            Vector3 direction = (other.transform.position - transform.position).normalized;
-
-            direction.y = Mathf.Clamp(direction.y, 0, 1);
-
-            other.gameObject.GetComponent<Rigidbody>().AddForce(direction * 30, ForceMode.Impulse);
+            other.gameObject.GetComponent<BallBehaviour>().KnockBall(transform.position, 1, 1);
         }
 
         Destroy(gameObject);

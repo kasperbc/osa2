@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private float turnSpeed;    // How fast the player turns
     [SerializeField]
     private GameObject playerModel;  // The player model that's used for rotation
+    private bool isBoosting;    // Is the player boosting?
     private float boostMeter;   // How much the player can use the boost ability
     private bool boostDepleted;   // Has the boost been depleted?
     void Start()
@@ -29,13 +30,13 @@ public class PlayerMovement : MonoBehaviour
         //
 
         // Is the player able to boost?
-        bool boost = Input.GetKey(KeyCode.LeftShift) && boostMeter > 0 && !boostDepleted;
+        isBoosting = Input.GetKey(KeyCode.LeftShift) && boostMeter > 0 && !boostDepleted;
 
         // Get the UI boost meter object
         Image boostBar = GameObject.Find("BoostBar").GetComponent<Image>();
 
         // If the player is boosting, speed up the player
-        if (boost)
+        if (isBoosting)
         {
             horizontal *= 1.5f;
             vertical *= 1.5f;
@@ -81,5 +82,10 @@ public class PlayerMovement : MonoBehaviour
         boostDepleted = true;
 
         boostMeter = -3;
+    }
+
+    public bool Boosting()
+    {
+        return isBoosting;
     }
 }
