@@ -18,44 +18,11 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        GameObject.Find("Score").GetComponent<Text>().text = "Player 1: " + scores[1] + "\nPlayer 2: " + scores[0] + "\n\nFirst to 5 wins";
     }
 
     public void LoadTitle()
     {
         SceneManager.LoadScene("Title");
-    }
-
-    public void AddScore(int score)
-    {
-        scores[score]++;
-
-        if (score == 0)
-        {
-            StartCoroutine(DisplayStatus("Player 2 scored!"));
-        }
-        if (score == 1)
-        {
-            StartCoroutine(DisplayStatus("Player 1 scored!"));
-        }
-
-        GameObject.Find("Ball").GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-
-        GameObject.Find("Score").GetComponent<Text>().text = "Player 1: " + scores[1] + "\nPlayer 2: " + scores[0] + "\n\nFirst to 5 wins";
-
-        if (scores[0] >= 5)
-        {
-            StartCoroutine(DisplayStatus("Player 2 wins!"));
-        }
-        else if (scores[1] >= 5)
-        {
-            StartCoroutine(DisplayStatus("Player 1 wins!"));
-        }
-        else
-        {
-            Invoke("ReloadScene", 5);
-        }
     }
 
     public IEnumerator DisplayStatus(string status)

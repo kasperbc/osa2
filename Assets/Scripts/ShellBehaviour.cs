@@ -7,15 +7,45 @@ public class ShellBehaviour : MonoBehaviour
     [SerializeField]
     GameObject explosion;
     public float followSpeed;
-    private void Update()
+
+    Transform ball;
+    void Start()
     {
-        transform.LookAt(GameObject.Find("Ball").transform);
+        GameObject b = GameObject.Find("Ball");
+        if (b != null)
+        {
+            ball = b.transform;
+        }
+    }
+
+    void Update()
+    {
+        if (ball != null)
+        {
+            SteerTowardsObject(ball, 90);
+        }
 
         Vector3 followDir = Vector3.forward;
 
         transform.Translate(followDir * followSpeed * Time.deltaTime);
     }
 
+    void SteerTowardsObject(Transform target, float maxAngle)
+    {
+        Vector3 relativePos = target.position - transform.position;
+
+        Quaternion rotationToObject = Quaternion.LookRotation(relativePos);
+        float angleToObject = Quaternion.Angle(rotationToObject, transform.rotation);
+
+        if (angleToObject < maxAngle)
+        {
+            transform.LookAt(target);
+        }
+    }
+    void SteerTowardsObject(Transform target)
+    {
+        SteerTowardsObject(target, 360);
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "Bounds")

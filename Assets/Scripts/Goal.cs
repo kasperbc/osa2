@@ -10,7 +10,7 @@ public class Goal : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ball"))
         {
-            GameManager.instance.AddScore(goalIndex);
+            // Add score to counter above goal
         }
     }
 }
