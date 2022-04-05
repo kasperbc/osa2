@@ -9,8 +9,7 @@ public class PlayerShoot : MonoBehaviour
     GameObject barrel;      // The gun barrel
     [SerializeField]
     private GameObject shell;   // The shell that the tank fires
-    [SerializeField]
-    Camera cam;                 // The camera that is following the player
+    public Camera cam;                 // The camera that is following the player
     private bool onCooldown;    // Is the tank fire on cooldown/reloading?
     [SerializeField] bool p2;   // Is the tank player 2?
     public GameObject reloadBar;    // The reload UI circle
@@ -18,28 +17,6 @@ public class PlayerShoot : MonoBehaviour
     void Start()
     {
         barrel = gunModel.transform.GetChild(0).gameObject;
-    }
-
-    void Update()
-    {
-        KeyCode fireKey = KeyCode.Mouse0;
-
-        if (p2)
-        {
-            fireKey = KeyCode.Space;
-            KeyboardAim();
-        }
-        else
-        {
-            MouseAim();
-        }
-
-
-        // Check if fire button pressed
-        if (Input.GetKeyDown(fireKey))
-        {
-            Shoot();
-        }
     }
 
     void MouseAim()
@@ -64,8 +41,6 @@ public class PlayerShoot : MonoBehaviour
             direction.y = -45;
         else if (Input.GetKey(KeyCode.RightArrow))
             direction.y = 45;
-        else if (!Input.GetKey(KeyCode.RightArrow) || !Input.GetKey(KeyCode.LeftArrow))
-            direction.y = 0;
 
         if (Input.GetKey(KeyCode.DownArrow))
         {
@@ -73,12 +48,23 @@ public class PlayerShoot : MonoBehaviour
             direction.x /= 2;
         }
 
-        direction += transform.rotation.eulerAngles;
+        
 
         gunModel.transform.rotation = Quaternion.Euler(direction);
     }
 
-    void Shoot()
+    public void Aim(Quaternion direction, bool relativeToOwnRotation)
+    {
+        if (relativeToOwnRotation)
+        {
+            Vector3 relativeDirection = transform.rotation.eulerAngles + direction.eulerAngles;
+            direction = Quaternion.Euler(relativeDirection);
+        }
+
+        gunModel.transform.rotation = Quaternion.Slerp(gunModel.transform.rotation, direction, Time.deltaTime * 20);
+    }
+
+    public void Shoot()
     {
         // Check if barrel on cooldown, don't fire if yes
         if (onCooldown)
