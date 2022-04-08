@@ -149,6 +149,7 @@ public class PlayerControl : MonoBehaviour
     bool GetShootKey()
     {
         KeyCode shootKey = KeyCode.None;
+        KeyCode altShootKey = KeyCode.None;
 
         switch (controlMethod)
         {
@@ -161,10 +162,11 @@ public class PlayerControl : MonoBehaviour
                 break;
             case ControlMethod.PS4:
                 shootKey = KeyCode.JoystickButton1;
+                altShootKey = KeyCode.JoystickButton7;
                 break;
         }
 
-        return Input.GetKey(shootKey);
+        return Input.GetKey(shootKey) || Input.GetKey(altShootKey);
     }
 
     Quaternion LookMouseDirection()
@@ -199,12 +201,12 @@ public class PlayerControl : MonoBehaviour
                 direction *= 45;
                 break;
             case ControlMethod.PS4:
-                direction.x = Input.GetAxis("RightStickHorizontal");
-                direction.y = Input.GetAxis("RightStickVertical");
+                direction.x = Input.GetAxis("RightStickVertical");
+                direction.y = Input.GetAxis("RightStickHorizontal");
 
                 direction *= -45;
 
-                direction.x = Mathf.Clamp(direction.y, 0, 45);
+                direction.x = Mathf.Clamp(direction.x, -45, 0);
                 break;
         }
 
