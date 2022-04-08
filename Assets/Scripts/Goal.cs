@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Goal : MonoBehaviour
 {
-    public int goalIndex;
-
+    public GameObject scoreCounter;
+    private int score;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ball"))
         {
-            // Add score to counter above goal
+            score++;
+
+            scoreCounter.GetComponent<TMPro.TextMeshPro>().SetText(score.ToString());
         }
     }
 }
