@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    public enum ControlMethod { MouseAndKeyboard, MouseOnly, KeyboardOnly };
+    public enum ControlMethod { MouseAndKeyboard, MouseOnly, KeyboardOnly, PS4 };
     public ControlMethod controlMethod;
 
     PlayerMovement movementComponent;
@@ -12,8 +12,6 @@ public class PlayerControl : MonoBehaviour
 
     float vertical;     // Used for up/down movement
     float horizontal;   // Used for left/right movement
-    bool shoot;     // Used for shooting
-    bool boost;     // Used for boosting
 
     void Start()
     {
@@ -25,7 +23,14 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         // Movement axis
-        SetMovementAxisDigital();
+        if (controlMethod != ControlMethod.PS4)
+        {
+            SetMovementAxisDigital();
+        }
+        else
+        {
+            SetMovementAxisAnalog();
+        }
         movementComponent.SetDirection(horizontal, vertical);
 
         // Boost
@@ -101,6 +106,25 @@ public class PlayerControl : MonoBehaviour
         return GetDigitalAxisDirection(Input.GetKey(positive), Input.GetKey(negative));
     }
 
+    void SetMovementAxisAnalog()
+    {
+        Vector2 axis = Vector2.zero;
+
+        switch (controlMethod)
+        {
+            case ControlMethod.PS4:
+                axis.x = Input.GetAxis("LeftStickHorizontal") * 2;
+                axis.y = Input.GetAxis("LeftStickVertical");
+                break;
+        }
+
+        horizontal = axis.x;
+        vertical = axis.y;
+
+        horizontal = Mathf.Clamp(horizontal, -1, 1);
+        vertical = Mathf.Clamp(vertical, -1, 1);
+    }
+
     bool GetBoostKey()
     {
         KeyCode boostKey = KeyCode.None;
@@ -113,6 +137,9 @@ public class PlayerControl : MonoBehaviour
                 break;
             case ControlMethod.MouseOnly:
                 boostKey = KeyCode.Mouse2;
+                break;
+            case ControlMethod.PS4:
+                boostKey = KeyCode.JoystickButton0;
                 break;
         }
 
@@ -131,6 +158,9 @@ public class PlayerControl : MonoBehaviour
                 break;
             case ControlMethod.KeyboardOnly:
                 shootKey = KeyCode.Space;
+                break;
+            case ControlMethod.PS4:
+                shootKey = KeyCode.JoystickButton1;
                 break;
         }
 
@@ -167,6 +197,14 @@ public class PlayerControl : MonoBehaviour
                 direction.y = GetDigitalAxisDirection(Input.GetKey(KeyCode.RightArrow), Input.GetKey(KeyCode.LeftArrow));
 
                 direction *= 45;
+                break;
+            case ControlMethod.PS4:
+                direction.x = Input.GetAxis("RightStickHorizontal");
+                direction.y = Input.GetAxis("RightStickVertical");
+
+                direction *= -45;
+
+                direction.x = Mathf.Clamp(direction.y, 0, 45);
                 break;
         }
 
