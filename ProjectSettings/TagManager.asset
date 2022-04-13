@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ball
+  - PlayerCamera
+  - PlayerVirtualCamera
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - UI
   - P1 Cam
   - P2 Cam
-  - 
+  - P3 Cam
   - 
   - 
   - 

@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+
     public enum ControlMethod { MouseAndKeyboard, MouseOnly, KeyboardOnly, PS4 };
     public ControlMethod controlMethod;
+    public int controllerPort;
+
+    private enum JoystickAxis { LeftStickHorizontal, LeftStickVertical, RightStickHorizontal, RightStickVertical };
 
     PlayerMovement movementComponent;
     PlayerShoot shootComponent;
@@ -113,8 +117,8 @@ public class PlayerControl : MonoBehaviour
         switch (controlMethod)
         {
             case ControlMethod.PS4:
-                axis.x = Input.GetAxis("LeftStickHorizontal") * 2;
-                axis.y = Input.GetAxis("LeftStickVertical");
+                axis.x = GetJoystickAxis(JoystickAxis.LeftStickHorizontal) * 2;
+                axis.y = GetJoystickAxis(JoystickAxis.LeftStickVertical);
                 break;
         }
 
@@ -139,7 +143,7 @@ public class PlayerControl : MonoBehaviour
                 boostKey = KeyCode.Mouse2;
                 break;
             case ControlMethod.PS4:
-                boostKey = KeyCode.JoystickButton0;
+                boostKey = GetJoystickButton(KeyCode.JoystickButton0);
                 break;
         }
 
@@ -161,8 +165,8 @@ public class PlayerControl : MonoBehaviour
                 shootKey = KeyCode.Space;
                 break;
             case ControlMethod.PS4:
-                shootKey = KeyCode.JoystickButton1;
-                altShootKey = KeyCode.JoystickButton7;
+                shootKey = GetJoystickButton(KeyCode.JoystickButton1);
+                altShootKey = GetJoystickButton(KeyCode.JoystickButton7);
                 break;
         }
 
@@ -201,8 +205,8 @@ public class PlayerControl : MonoBehaviour
                 direction *= 45;
                 break;
             case ControlMethod.PS4:
-                direction.x = Input.GetAxis("RightStickVertical");
-                direction.y = Input.GetAxis("RightStickHorizontal");
+                direction.x = GetJoystickAxis(JoystickAxis.RightStickVertical);
+                direction.y = GetJoystickAxis(JoystickAxis.RightStickHorizontal);
 
                 direction *= -45;
 
@@ -211,5 +215,44 @@ public class PlayerControl : MonoBehaviour
         }
 
         return direction;
+    }
+
+    KeyCode GetJoystickButton(KeyCode button)
+    {
+        if (controllerPort == 0)
+        {
+            return KeyCode.None;
+        }
+
+        int keyCodeID = (int)button;
+        return (KeyCode)keyCodeID + (20 * controllerPort);
+    }
+
+    float GetJoystickAxis(JoystickAxis axis)
+    {
+        if (controllerPort == 0)
+        {
+            return 0;
+        }
+
+        string inputAxis = string.Empty;
+
+        switch (axis)
+        {
+            case JoystickAxis.LeftStickHorizontal:
+                inputAxis = "LeftStickHorizontal";
+                break;
+            case JoystickAxis.LeftStickVertical:
+                inputAxis = "LeftStickVertical";
+                break;
+            case JoystickAxis.RightStickHorizontal:
+                inputAxis = "RightStickHorizontal";
+                break;
+            case JoystickAxis.RightStickVertical:
+                inputAxis = "RightStickVertical";
+                break;
+        }
+
+        return Input.GetAxis(inputAxis + controllerPort);
     }
 }
