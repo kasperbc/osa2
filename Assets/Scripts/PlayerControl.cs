@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlayerControl : MonoBehaviour
     float horizontal;   // Used for left/right movement
     bool shoot;     // Used for shooting
     bool boost;     // Used for boosting
+
+    public float turnSpeed = 5;
 
     void Start()
     {
@@ -68,17 +71,22 @@ public class PlayerControl : MonoBehaviour
                 down = KeyCode.S;
                 break;
             case ControlMethod.MouseOnly:
-                left = KeyCode.O;
-                right = KeyCode.P;
+                left = KeyCode.None;
+                right = KeyCode.None;
                 up = KeyCode.Mouse1;
                 break;
         }
-        
+
         horizontal = Mathf.MoveTowards(horizontal, GetDigitalAxisDirection(right, left), Time.deltaTime * 9);
         vertical = Mathf.MoveTowards(vertical, GetDigitalAxisDirection(up, down), Time.deltaTime * 9);
 
         horizontal = Mathf.Clamp(horizontal, -1, 1);
         vertical = Mathf.Clamp(vertical, -1, 1);
+
+        if (controlMethod == ControlMethod.MouseOnly)
+        {
+            horizontal = -Input.mouseScrollDelta.y * 10;
+        }
     }
 
     int GetDigitalAxisDirection(bool positive, bool negative)

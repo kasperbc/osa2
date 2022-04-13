@@ -5124,6 +5124,7 @@ GameObject:
   - component: {fileID: 5761853702580526524}
   - component: {fileID: 5761853702580526525}
   - component: {fileID: 396368562119146648}
+  - component: {fileID: 6587167014745369485}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5221,3 +5222,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba400e455881e3b4a91aba0fb278cbf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controlMethod: 0
+  turnSpeed: 0
+--- !u!114 &6587167014745369485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761853702580526527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f57d5714323f94d428ad60d1fe9f7077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionPrefab: {fileID: 2803802482359244845, guid: 7d33f886747eb3a44b4f33f201e73f64, type: 3}
+  healthBar: {fileID: 0}
+  health: 0

@@ -7,6 +7,8 @@ public class Goal : MonoBehaviour
 {
     public GameObject scoreCounter;
     private int score;
+    public bool practice;
+    public int goalID;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ball"))
