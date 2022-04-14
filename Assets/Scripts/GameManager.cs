@@ -10,6 +10,11 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     [Range(1, 4)]
     public int playerCount = 1;
+
+    private GameObject player;
+    private GameObject playerCamera;
+    private GameObject playerVirtualCamera;
+    private GameObject reloadBar;
     void Start()
     {
         if (instance == null)
@@ -20,6 +25,12 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // Load resources
+        player = Resources.Load<GameObject>("Prefabs/Player");
+        playerCamera = Resources.Load<GameObject>("Prefabs/Player Camera");
+        playerVirtualCamera = Resources.Load<GameObject>("Prefabs/Virtual Camera");
+        reloadBar = Resources.Load<GameObject>("Prefabs/Reload Bar");
 
         LoadMap("Lobby");
     }
@@ -59,28 +70,22 @@ public class GameManager : MonoBehaviour
         GameObject spawnedMap = Instantiate(map);
         spawnedMap.name = "Map";
 
-        // Load resources
-        GameObject player = Resources.Load<GameObject>("Prefabs/Player");
-        GameObject playerCam = Resources.Load<GameObject>("Prefabs/Player Camera");
-        GameObject virtualCam = Resources.Load<GameObject>("Prefabs/Virtual Camera");
-        GameObject reloadBar = Resources.Load<GameObject>("Prefabs/Reload Bar");
-
         // Setup players
         for (int i = 0; i < playerCount; i++)
         {
             Vector3 spawnPoint = spawnedMap.GetComponent<MapData>().spawnpoints[i];
 
-            SpawnPlayer(player, playerCam, virtualCam, reloadBar, i + 1, spawnPoint);
+            SpawnPlayer(i + 1, spawnPoint);
         }
     }
 
-    void SpawnPlayer(GameObject playerPrefab, GameObject camPrefab, GameObject vCamPrefab, GameObject reloadBarPrefab, int playerNo, Vector3 spawnpoint)
+    void SpawnPlayer(int playerNo, Vector3 spawnpoint)
     {
         // Spawn player objects and cameras
-        GameObject spawnedPlayer = Instantiate(playerPrefab);
-        GameObject spawnedCam = Instantiate(camPrefab);
-        GameObject spawnedVCam = Instantiate(vCamPrefab);
-        GameObject spawnedRBar = Instantiate(reloadBarPrefab, GameObject.Find("Canvas").transform);
+        GameObject spawnedPlayer = Instantiate(player);
+        GameObject spawnedCam = Instantiate(playerCamera);
+        GameObject spawnedVCam = Instantiate(playerVirtualCamera);
+        GameObject spawnedRBar = Instantiate(reloadBar, GameObject.Find("Canvas").transform);
 
         // Set names
         spawnedPlayer.name = "Player " + playerNo;
@@ -144,6 +149,7 @@ public class GameManager : MonoBehaviour
                     cam.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
                 break;
         }
+        //SetSplitScreenCameras();
 
         // Set reload bar location
         Vector2 barPos = Vector2.zero;
@@ -194,7 +200,7 @@ public class GameManager : MonoBehaviour
         print("Spawned Player " + playerNo);
     }
 
-    public void RemovePlayer(int number, bool removeCamera)
+    public void RemovePlayer(int number)
     {
         GameObject player = GameObject.Find("Player " + number);
 
@@ -203,27 +209,130 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Could not find Player " + number + ". (RemovePlayer)");
             return;
         }
+        if (playerCount <= 0)
+        {
+            Debug.LogWarning("There are no players loaded.");
+            return;
+        }
+
+        playerCount--;
 
         GameObject cam = player.GetComponent<PlayerShoot>().cam.gameObject;
 
         GameObject vCam = cam.GetComponent<CinemachineBrain>().ActiveVirtualCamera.VirtualCameraGameObject;
 
         Destroy(player);
-        if (removeCamera)
-        {
-            Destroy(cam);
-        }
-        else
-        {
-            Destroy(cam.GetComponent<CinemachineBrain>());
-        }
+        Destroy(cam);
         Destroy(vCam);
 
         print("Removed Player " + number);
+
+        // Re-order other players
+        for (int i = number + 1; i <= 4; i++)
+        {
+            GameObject p = GameObject.Find("Player " + i);
+
+            if (p != null)
+            {
+                p.name = "Player " + (i - 1);
+                GameObject c = p.GetComponent<PlayerShoot>().cam.gameObject;
+                c.layer--;
+                c.name = "Player " + (i - 1) + " Camera";
+                GameObject v = c.GetComponent<CinemachineBrain>().ActiveVirtualCamera.VirtualCameraGameObject;
+                v.layer--;
+                v.name = "Player " + (i - 1) + " Virtual Camera";
+                p.GetComponent<PlayerShoot>().reloadBar.name = "Player " + (i - 1) + " Reload Bar";
+
+
+                c.GetComponent<Camera>().cullingMask |= 1 << c.layer;
+                c.GetComponent<Camera>().cullingMask &= ~(1 << (c.layer + 1));
+            }
+        }
+
+
+        SetSplitScreenCameras();
     }
-    public void RemovePlayer(int number)
+
+    private MapData GetMapData()
     {
-        RemovePlayer(number, false);
+        GameObject map = GameObject.Find("Map");
+
+        if (map != null)
+        {
+            return GameObject.Find("Map").GetComponent<MapData>();
+        }
+        else
+        {
+            Debug.LogError("Unable to get map data.");
+            return null;
+        } 
+    }
+    public void RemovePlayer()
+    {
+        RemovePlayer(playerCount);
+    }
+
+    public void AddPlayer()
+    {
+        if (playerCount >= 4)
+        {
+            Debug.LogWarning("Player limit reached. Unable to add more.");
+            return;
+        }
+        
+        playerCount++;
+
+        SpawnPlayer(playerCount, GetMapData().spawnpoints[playerCount - 1]);
+        SetSplitScreenCameras();
+    }
+
+    private void SetSplitScreenCameras()
+    {
+        GameObject[] cameraObjects = GameObject.FindGameObjectsWithTag("PlayerCamera");
+        Camera[] cameras = new Camera[4];
+
+        foreach (GameObject c in cameraObjects)
+        {
+            Camera cam = c.GetComponent<Camera>();
+
+            switch (c.layer)
+            {
+                case 6:
+                    cameras[0] = cam;
+                    break;
+                case 7:
+                    cameras[1] = cam;
+                    break;
+                case 8:
+                    cameras[2] = cam;
+                    break;
+                case 9:
+                    cameras[3] = cam;
+                    break;
+            }
+        }
+
+        switch (playerCount)
+        {
+            case 1:
+                cameras[0].rect = new Rect(0, 0, 1, 1);
+                break;
+            case 2:
+                cameras[0].rect = new Rect(0, 0.5f, 1, 0.5f);
+                cameras[1].rect = new Rect(0, 0, 1, 0.5f);
+                break;
+            case 3:
+                cameras[0].rect = new Rect(0, 0.5f, 1, 0.5f);
+                cameras[1].rect = new Rect(0, 0, 0.5f, 0.5f);
+                cameras[2].rect = new Rect(0.5f, 0, 0.5f, 0.5f);
+                break;
+            case 4:
+                cameras[0].rect = new Rect(0, 0.5f, 0.5f, 0.5f);
+                cameras[1].rect = new Rect(0.5f, 0.5f, 0.5f, 0.5f);
+                cameras[2].rect = new Rect(0, 0, 0.5f, 0.5f);
+                cameras[3].rect = new Rect(0.5f, 0, 0.5f, 0.5f);
+                break;
+        }
     }
 
     public void UnloadMap()
@@ -232,7 +341,7 @@ public class GameManager : MonoBehaviour
 
         if (map == null)
         {
-            Debug.LogWarning("There is no map loaded.");
+            Debug.Log("There is no map loaded.");
             return;
         }
 
@@ -240,7 +349,7 @@ public class GameManager : MonoBehaviour
 
         for (int p = 1; p <= playerCount; p++)
         {
-            RemovePlayer(p, true);
+            RemovePlayer(p);
         }
 
         print("Unloaded map.");

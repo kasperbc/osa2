@@ -173,7 +173,7 @@ public class PlayerControl : MonoBehaviour
         return Input.GetKey(shootKey) || Input.GetKey(altShootKey);
     }
 
-    Quaternion LookMouseDirection()
+    Vector3 LookMouseDirection()
     {
         Quaternion result = Quaternion.identity;
 
@@ -186,7 +186,9 @@ public class PlayerControl : MonoBehaviour
             result = Quaternion.LookRotation(direction);
         }
 
-        return result;
+        Vector3 eulers = result.eulerAngles;
+
+        return eulers;
     }
 
     Vector3 GetAim()
@@ -197,7 +199,7 @@ public class PlayerControl : MonoBehaviour
         {
             case ControlMethod.MouseAndKeyboard:
             case ControlMethod.MouseOnly:
-                return LookMouseDirection().eulerAngles;
+                return LookMouseDirection();
             case ControlMethod.KeyboardOnly:
                 direction.x = GetDigitalAxisDirection(Input.GetKey(KeyCode.None), Input.GetKey(KeyCode.UpArrow));
                 direction.y = GetDigitalAxisDirection(Input.GetKey(KeyCode.RightArrow), Input.GetKey(KeyCode.LeftArrow));

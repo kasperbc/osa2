@@ -62,6 +62,13 @@ public class PlayerShoot : MonoBehaviour
         }
 
         gunModel.transform.rotation = Quaternion.Slerp(gunModel.transform.rotation, direction, Time.deltaTime * 20);
+
+        Vector3 eulers = gunModel.transform.rotation.eulerAngles;
+
+        //eulers.x = Mathf.Clamp(eulers.x, -45, 0);
+        //eulers.y = Mathf.Clamp(eulers.y, -45, 45);
+
+        gunModel.transform.rotation = Quaternion.Euler(eulers);
     }
 
     public void Shoot()
