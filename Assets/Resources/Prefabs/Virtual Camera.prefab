@@ -61,7 +61,7 @@ MonoBehaviour:
   ShoulderOffset: {x: 0, y: 0, z: 0}
   VerticalArmLength: 1.5
   CameraSide: 1
-  CameraDistance: 4
+  CameraDistance: 0
   CameraCollisionFilter:
     serializedVersion: 2
     m_Bits: 0

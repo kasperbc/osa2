@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
         shootComponent.cam = spawnedCam.GetComponent<Camera>();
 
         // Link camera to player
-        spawnedVCam.GetComponent<CinemachineVirtualCamera>().Follow = spawnedPlayer.transform.GetChild(0);
+        spawnedVCam.GetComponent<CinemachineVirtualCamera>().Follow = spawnedPlayer.transform.GetChild(1);
 
         // Link player to UI components
         shootComponent.reloadBar = spawnedRBar;
