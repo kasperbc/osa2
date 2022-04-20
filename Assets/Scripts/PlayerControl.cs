@@ -21,6 +21,8 @@ public class PlayerControl : MonoBehaviour
     {
         movementComponent = GetComponent<PlayerMovement>();
         shootComponent = GetComponent<PlayerShoot>();
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -44,13 +46,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         // Aim
-        bool relativeAim = true;
-        if (controlMethod == ControlMethod.MouseAndKeyboard || controlMethod == ControlMethod.MouseOnly)
-        {
-            relativeAim = false;
-        }
-
-        shootComponent.Aim(Quaternion.Euler(GetAim()), relativeAim);
+        shootComponent.Aim(GetAim());
 
         // Shoot
         if (GetShootKey())
@@ -199,7 +195,9 @@ public class PlayerControl : MonoBehaviour
         {
             case ControlMethod.MouseAndKeyboard:
             case ControlMethod.MouseOnly:
-                return LookMouseDirection();
+                direction.x = -Input.GetAxis("Mouse Y");
+                direction.y = Input.GetAxis("Mouse X");
+                break;
             case ControlMethod.KeyboardOnly:
                 direction.x = GetDigitalAxisDirection(Input.GetKey(KeyCode.None), Input.GetKey(KeyCode.UpArrow));
                 direction.y = GetDigitalAxisDirection(Input.GetKey(KeyCode.RightArrow), Input.GetKey(KeyCode.LeftArrow));
