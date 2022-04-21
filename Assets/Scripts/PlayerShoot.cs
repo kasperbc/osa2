@@ -52,6 +52,8 @@ public class PlayerShoot : MonoBehaviour
 
         // Play reload animation
         reloadBar.GetComponent<Animator>().SetTrigger("Reload");
+
+        SoundManager.instance.PlaySound("fire", 0.6f, Random.Range(0.9f, 1.1f), false, false);
     }
 
     void DeactivateCooldown()

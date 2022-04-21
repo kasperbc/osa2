@@ -21,8 +21,6 @@ public class PlayerControl : MonoBehaviour
     {
         movementComponent = GetComponent<PlayerMovement>();
         shootComponent = GetComponent<PlayerShoot>();
-
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -52,6 +50,11 @@ public class PlayerControl : MonoBehaviour
         if (GetShootKey())
         {
             shootComponent.Shoot();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab) && controlMethod == ControlMethod.MouseAndKeyboard)
+        {
+            GameManager.instance.ToggleMouseLock();
         }
     }
 

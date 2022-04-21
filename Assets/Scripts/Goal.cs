@@ -14,6 +14,8 @@ public class Goal : MonoBehaviour
             score++;
 
             scoreCounter.GetComponent<TMPro.TextMeshPro>().SetText(score.ToString());
+
+            SoundManager.instance.PlaySound("goal");
         }
     }
 }

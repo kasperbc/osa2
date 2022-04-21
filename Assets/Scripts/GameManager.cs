@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     private GameObject playerCamera;
     private GameObject playerVirtualCamera;
     private GameObject reloadBar;
+    private GameObject crosshair;
+
+    private bool cursorLocked;
     void Start()
     {
         if (instance == null)
@@ -31,8 +34,27 @@ public class GameManager : MonoBehaviour
         playerCamera = Resources.Load<GameObject>("Prefabs/Player Camera");
         playerVirtualCamera = Resources.Load<GameObject>("Prefabs/Virtual Camera");
         reloadBar = Resources.Load<GameObject>("Prefabs/Reload Bar");
+        crosshair = Resources.Load<GameObject>("Prefabs/Crosshair");
 
         LoadMap("Lobby");
+
+        ToggleMouseLock();
+
+        SoundManager.instance.PlaySound("whitenoise", 0.2f, 1, true, false);
+    }
+
+    public void ToggleMouseLock()
+    {
+        cursorLocked = !cursorLocked;
+
+        if (cursorLocked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     public void LoadTitle()
@@ -86,6 +108,7 @@ public class GameManager : MonoBehaviour
         GameObject spawnedCam = Instantiate(playerCamera);
         GameObject spawnedVCam = Instantiate(playerVirtualCamera);
         GameObject spawnedRBar = Instantiate(reloadBar, GameObject.Find("Canvas").transform);
+        GameObject spawnedCrosshair = Instantiate(crosshair, GameObject.Find("Canvas").transform);
 
         // Set names
         spawnedPlayer.name = "Player " + playerNo;
@@ -149,13 +172,13 @@ public class GameManager : MonoBehaviour
                     cam.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
                 break;
         }
-        //SetSplitScreenCameras();
 
-        // Set reload bar location
+        // Set reload bar and crosshair location
         Vector2 barPos = Vector2.zero;
         barPos.x = (cam.rect.x * 4 - 1 + ((cam.rect.width - 0.5f) * 2)) * 200;
         barPos.y = (cam.rect.y * 4 - 1 + ((cam.rect.height - 0.5f) * 2)) * 120;
         spawnedRBar.GetComponent<RectTransform>().localPosition = barPos;
+        spawnedCrosshair.GetComponent<RectTransform>().localPosition = barPos;
 
         // Spawn player at spawnpoint
         spawnedPlayer.transform.position = spawnpoint;

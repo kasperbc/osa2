@@ -11,13 +11,6 @@ public class BallBehaviour : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -29,7 +22,10 @@ public class BallBehaviour : MonoBehaviour
             }
 
             KnockBall(collision.transform.position, kb, 0.5f);
+
         }
+        
+        SoundManager.instance.PlaySound("kick", 0.75f, Random.Range(0.9f, 1.1f), false, false);
     }
 
     public void KnockBall(Vector3 from, float hitMultiplier, float verticalMultiplier)
