@@ -116,7 +116,7 @@ public class PlayerControl : MonoBehaviour
         switch (controlMethod)
         {
             case ControlMethod.PS4:
-                axis.x = GetJoystickAxis(JoystickAxis.LeftStickHorizontal) * 2;
+                axis.x = GetJoystickAxis(JoystickAxis.LeftStickHorizontal);
                 axis.y = GetJoystickAxis(JoystickAxis.LeftStickVertical);
                 break;
         }
@@ -205,15 +205,15 @@ public class PlayerControl : MonoBehaviour
                 direction.x = GetDigitalAxisDirection(Input.GetKey(KeyCode.None), Input.GetKey(KeyCode.UpArrow));
                 direction.y = GetDigitalAxisDirection(Input.GetKey(KeyCode.RightArrow), Input.GetKey(KeyCode.LeftArrow));
 
-                direction *= 45;
+                //direction *= 45;
                 break;
             case ControlMethod.PS4:
-                direction.x = GetJoystickAxis(JoystickAxis.RightStickVertical);
-                direction.y = GetJoystickAxis(JoystickAxis.RightStickHorizontal);
+                direction.x = -GetJoystickAxis(JoystickAxis.RightStickVertical);
+                direction.y = -GetJoystickAxis(JoystickAxis.RightStickHorizontal);
 
-                direction *= -45;
+                direction /= 4;
 
-                direction.x = Mathf.Clamp(direction.x, -45, 0);
+                //direction.x = Mathf.Clamp(direction.x, -45, 0);
                 break;
         }
 

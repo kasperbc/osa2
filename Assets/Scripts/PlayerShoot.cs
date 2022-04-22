@@ -13,6 +13,7 @@ public class PlayerShoot : MonoBehaviour
     private bool onCooldown;    // Is the tank fire on cooldown/reloading?
     [SerializeField] bool p2;   // Is the tank player 2?
     public GameObject reloadBar;    // The reload UI circle
+    public GameObject crossHair;
 
     Vector2 rotation = Vector2.zero;
 
@@ -39,11 +40,15 @@ public class PlayerShoot : MonoBehaviour
 
         // Activate cooldown
         onCooldown = true;
-        Invoke("DeactivateCooldown", 0.5f);
+        Invoke(nameof(DeactivateCooldown), 0.5f);
 
         // Fire the shell
         Vector3 spawnPos = gunModel.transform.position + gunModel.transform.forward * 2;
-        GameObject spawnedShell = Instantiate(shell, spawnPos, gunModel.transform.rotation);
+        
+        Vector3 spawnRot = gunModel.transform.eulerAngles;
+        spawnRot.x -= 15;
+
+        GameObject spawnedShell = Instantiate(shell, spawnPos, Quaternion.Euler(spawnRot));
         spawnedShell.GetComponent<Rigidbody>().AddForce((spawnPos - gunModel.transform.position) * 20, ForceMode.Impulse);
 
         // Play animation
