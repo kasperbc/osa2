@@ -211,7 +211,7 @@ public class PlayerControl : MonoBehaviour
                 direction.x = -GetJoystickAxis(JoystickAxis.RightStickVertical);
                 direction.y = -GetJoystickAxis(JoystickAxis.RightStickHorizontal);
 
-                direction /= 4;
+                direction /= 16;
 
                 //direction.x = Mathf.Clamp(direction.x, -45, 0);
                 break;

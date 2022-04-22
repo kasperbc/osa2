@@ -6,6 +6,7 @@ public class MapData : MonoBehaviour
 {
     public Vector3[] spawnpoints = new Vector3[4];
 
+    public List<Vector3> troopSpawnpoints = new List<Vector3>();
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
@@ -19,5 +20,11 @@ public class MapData : MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(spawnpoints[3], 0.5f);
+
+        Gizmos.color = Color.black;
+        foreach (var point in troopSpawnpoints)
+        {
+            Gizmos.DrawSphere(point, 0.5f);
+        }
     }
 }

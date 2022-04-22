@@ -517,20 +517,73 @@ public class GameManager : MonoBehaviour
 
         LoadMap("Diamond");
 
-        StartWave();
+        Instantiate(Resources.Load<GameObject>("Prefabs/WaveManager"));
+        
+        StartCoroutine(StartWave());
     }
 
-    public void StartWave()
+    public IEnumerator StartWave()
     {
         wave++;
 
         StartCoroutine(DisplayStatus("Wave " + wave + " incoming!"));
 
-        Invoke(nameof(SpawnWave), 5);
+        yield return new WaitForSeconds(5);
+
+        StartCoroutine(SpawnWave());
     }
 
-    void SpawnWave()
+    IEnumerator SpawnWave()
     {
+        string[] waveData = WaveManager.instance.ReadWave(wave - 1);
 
+        foreach (string wave in waveData)
+        {
+            if (int.TryParse(wave, out int seconds))
+            {
+                yield return new WaitForSeconds(seconds);
+
+                continue;
+            }
+
+            char[] waveChars = wave.ToCharArray();
+
+            if (waveChars[0] == 'r')
+            {
+                SpawnTroop(WaveManager.Troop.Regular, wave);
+            }
+        }
+    }
+
+    void SpawnTroop(WaveManager.Troop troopType, string wave)
+    {
+        char[] waveChars = wave.ToCharArray();
+
+        string countString = string.Empty;
+
+        foreach (char waveChar in waveChars)
+        {
+            if (char.IsDigit(waveChar))
+            {
+                countString += waveChar;
+            }
+        }
+
+        int count = int.Parse(countString);
+
+        for (int i = 0; i < count; i++)
+        {
+            GameObject troopPrefab = WaveManager.instance.GetTroop(troopType);
+
+            MapData map = GameObject.Find("Map").GetComponent<MapData>();
+            int spawnPointIndex = Random.Range(0, map.troopSpawnpoints.Count);
+
+            Vector3 spawnPos = map.troopSpawnpoints[spawnPointIndex];
+
+            spawnPos.x += Random.Range(-5, 5);
+            spawnPos.z += Random.Range(-5, 5);
+
+            Instantiate(troopPrefab, spawnPos, Quaternion.Euler(Vector3.zero));
+        }
     }
 }
