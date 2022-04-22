@@ -22,7 +22,7 @@ public class ShellBehaviour : MonoBehaviour
     {
         if (ball != null)
         {
-            SteerTowardsObject(ball, 90);
+            //SteerTowardsObject(ball, 30);
         }
 
         Vector3 followDir = Vector3.forward;
@@ -64,8 +64,10 @@ public class ShellBehaviour : MonoBehaviour
             Vector3 hitDirection = (transform.position - other.transform.position).normalized;
             hitDirection.y *= 1.5f;
 
-            other.gameObject.GetComponent<Rigidbody>().AddForce(hitDirection * 20, ForceMode.Impulse);
+            other.gameObject.GetComponent<Rigidbody>().AddForce(hitDirection * 2, ForceMode.Impulse);
         }
+
+        SoundManager.instance.PlaySound("explosion", 0.15f, Random.Range(0.65f, 0.75f), false, false);
 
         Destroy(gameObject);
     }

@@ -13,62 +13,21 @@ public class PlayerShoot : MonoBehaviour
     private bool onCooldown;    // Is the tank fire on cooldown/reloading?
     [SerializeField] bool p2;   // Is the tank player 2?
     public GameObject reloadBar;    // The reload UI circle
+    public GameObject crossHair;
+
+    Vector2 rotation = Vector2.zero;
 
     void Start()
     {
         barrel = gunModel.transform.GetChild(0).gameObject;
     }
 
-    void MouseAim()
+    public void Aim(Vector3 direction)
     {
-        // Get the mouse position
-        Ray mouseWorldRay = cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(mouseWorldRay, out RaycastHit hit))
-        {
-            // If the mouse hits anything, look towards the mouse
-            Vector3 direction = hit.point - transform.position;
-            gunModel.transform.rotation = Quaternion.Slerp(gunModel.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 20);
-        }
-    }
+        rotation.x += direction.x;
+        rotation.y += direction.y;
 
-    void KeyboardAim()
-    {
-        Vector3 direction = Vector3.zero;
-
-        if (Input.GetKey(KeyCode.UpArrow))
-            direction.x = -35;
-        if (Input.GetKey(KeyCode.LeftArrow))
-            direction.y = -45;
-        else if (Input.GetKey(KeyCode.RightArrow))
-            direction.y = 45;
-
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            direction.y /= 2;
-            direction.x /= 2;
-        }
-
-        
-
-        gunModel.transform.rotation = Quaternion.Euler(direction);
-    }
-
-    public void Aim(Quaternion direction, bool relativeToOwnRotation)
-    {
-        if (relativeToOwnRotation)
-        {
-            Vector3 relativeDirection = transform.rotation.eulerAngles + direction.eulerAngles;
-            direction = Quaternion.Euler(relativeDirection);
-        }
-
-        gunModel.transform.rotation = Quaternion.Slerp(gunModel.transform.rotation, direction, Time.deltaTime * 20);
-
-        Vector3 eulers = gunModel.transform.rotation.eulerAngles;
-
-        //eulers.x = Mathf.Clamp(eulers.x, -45, 0);
-        //eulers.y = Mathf.Clamp(eulers.y, -45, 45);
-
-        gunModel.transform.rotation = Quaternion.Euler(eulers);
+        gunModel.transform.eulerAngles = rotation * 2.5f;
     }
 
     public void Shoot()
@@ -81,11 +40,15 @@ public class PlayerShoot : MonoBehaviour
 
         // Activate cooldown
         onCooldown = true;
-        Invoke("DeactivateCooldown", 0.5f);
+        Invoke(nameof(DeactivateCooldown), 0.5f);
 
         // Fire the shell
         Vector3 spawnPos = gunModel.transform.position + gunModel.transform.forward * 2;
-        GameObject spawnedShell = Instantiate(shell, spawnPos, gunModel.transform.rotation);
+        
+        Vector3 spawnRot = gunModel.transform.eulerAngles;
+        spawnRot.x -= 15;
+
+        GameObject spawnedShell = Instantiate(shell, spawnPos, Quaternion.Euler(spawnRot));
         spawnedShell.GetComponent<Rigidbody>().AddForce((spawnPos - gunModel.transform.position) * 20, ForceMode.Impulse);
 
         // Play animation
@@ -94,6 +57,8 @@ public class PlayerShoot : MonoBehaviour
 
         // Play reload animation
         reloadBar.GetComponent<Animator>().SetTrigger("Reload");
+
+        SoundManager.instance.PlaySound("fire", 0.6f, Random.Range(0.9f, 1.1f), false, false);
     }
 
     void DeactivateCooldown()

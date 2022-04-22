@@ -44,18 +44,17 @@ public class PlayerControl : MonoBehaviour
         }
 
         // Aim
-        bool relativeAim = true;
-        if (controlMethod == ControlMethod.MouseAndKeyboard || controlMethod == ControlMethod.MouseOnly)
-        {
-            relativeAim = false;
-        }
-
-        shootComponent.Aim(Quaternion.Euler(GetAim()), relativeAim);
+        shootComponent.Aim(GetAim());
 
         // Shoot
         if (GetShootKey())
         {
             shootComponent.Shoot();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab) && controlMethod == ControlMethod.MouseAndKeyboard)
+        {
+            GameManager.instance.ToggleMouseLock();
         }
     }
 
@@ -117,7 +116,7 @@ public class PlayerControl : MonoBehaviour
         switch (controlMethod)
         {
             case ControlMethod.PS4:
-                axis.x = GetJoystickAxis(JoystickAxis.LeftStickHorizontal) * 2;
+                axis.x = GetJoystickAxis(JoystickAxis.LeftStickHorizontal);
                 axis.y = GetJoystickAxis(JoystickAxis.LeftStickVertical);
                 break;
         }
@@ -199,20 +198,22 @@ public class PlayerControl : MonoBehaviour
         {
             case ControlMethod.MouseAndKeyboard:
             case ControlMethod.MouseOnly:
-                return LookMouseDirection();
+                direction.x = -Input.GetAxis("Mouse Y");
+                direction.y = Input.GetAxis("Mouse X");
+                break;
             case ControlMethod.KeyboardOnly:
                 direction.x = GetDigitalAxisDirection(Input.GetKey(KeyCode.None), Input.GetKey(KeyCode.UpArrow));
                 direction.y = GetDigitalAxisDirection(Input.GetKey(KeyCode.RightArrow), Input.GetKey(KeyCode.LeftArrow));
 
-                direction *= 45;
+                //direction *= 45;
                 break;
             case ControlMethod.PS4:
-                direction.x = GetJoystickAxis(JoystickAxis.RightStickVertical);
-                direction.y = GetJoystickAxis(JoystickAxis.RightStickHorizontal);
+                direction.x = -GetJoystickAxis(JoystickAxis.RightStickVertical);
+                direction.y = -GetJoystickAxis(JoystickAxis.RightStickHorizontal);
 
-                direction *= -45;
+                direction /= 4;
 
-                direction.x = Mathf.Clamp(direction.x, -45, 0);
+                //direction.x = Mathf.Clamp(direction.x, -45, 0);
                 break;
         }
 

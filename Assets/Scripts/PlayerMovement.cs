@@ -54,6 +54,11 @@ public class PlayerMovement : MonoBehaviour
         // Move the player
         transform.Translate(vertical * moveSpeed * Time.deltaTime * Vector3.forward);
         transform.Rotate(horizontal * Time.deltaTime * (turnSpeed * Mathf.Clamp(Mathf.Abs(vertical), 0.5f, 1)) * Vector3.up);
+
+        Vector2 barrelTurnDirection = Vector2.zero;
+        barrelTurnDirection.y = direction.x * Time.deltaTime * (turnSpeed / 5);
+
+        GetComponent<PlayerShoot>().Aim(barrelTurnDirection);
     }
 
     public void SetDirection(float horizontal, float vertical)
