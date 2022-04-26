@@ -27,6 +27,8 @@ public class PlayerShoot : MonoBehaviour
         rotation.x += direction.x;
         rotation.y += direction.y;
 
+        rotation.x = Mathf.Clamp(rotation.x, -30, 0);
+
         gunModel.transform.eulerAngles = rotation * 2.5f;
     }
 

@@ -518,7 +518,9 @@ public class GameManager : MonoBehaviour
         LoadMap("Diamond");
 
         Instantiate(Resources.Load<GameObject>("Prefabs/WaveManager"));
-        
+
+        EnableFog();
+
         StartCoroutine(StartWave());
     }
 
@@ -576,14 +578,27 @@ public class GameManager : MonoBehaviour
             GameObject troopPrefab = WaveManager.instance.GetTroop(troopType);
 
             MapData map = GameObject.Find("Map").GetComponent<MapData>();
-            int spawnPointIndex = Random.Range(0, map.troopSpawnpoints.Count);
 
-            Vector3 spawnPos = map.troopSpawnpoints[spawnPointIndex];
+            float spawnRot = Random.Range(0, 359);
+            float spawnDistance = Random.Range(30, 50);
 
-            spawnPos.x += Random.Range(-5, 5);
-            spawnPos.z += Random.Range(-5, 5);
+            Quaternion rotation = Quaternion.Euler(0, spawnRot, 0);
 
-            Instantiate(troopPrefab, spawnPos, Quaternion.Euler(Vector3.zero));
+            GameObject troop = Instantiate(troopPrefab, new Vector3(0, -3, 0), rotation);
+
+            troop.transform.Translate(troop.transform.forward * spawnDistance);
         }
+    }
+
+    void EnableFog()
+    {
+        RenderSettings.fog = true;
+
+        RenderSettings.fogDensity = 0.05f;
+    }
+
+    void DisableFog()
+    {
+        RenderSettings.fog = false;
     }
 }
