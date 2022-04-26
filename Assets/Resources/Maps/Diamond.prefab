@@ -1269,6 +1269,7 @@ GameObject:
   - component: {fileID: 6846475530171593141}
   - component: {fileID: 6846475530171593138}
   - component: {fileID: 6846475530171593139}
+  - component: {fileID: 6233284443972663651}
   m_Layer: 0
   m_Name: Diamond
   m_TagString: Untagged
@@ -1367,6 +1368,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 1}
   speed: 100
+--- !u!114 &6233284443972663651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6846475530171593137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a35fc6c2d34c894fad5bc759943aba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1000
+  health: 0
+  healthBar: {fileID: 0}
+  dyingParticle: {fileID: 397127418071871602, guid: a687a237919facf4eb7e2d85bfde2981, type: 3}
+  destroyOnDeath: 0
+  hideOnDeath: 1
+  dead: 0
 --- !u!1 &7994161204732184711
 GameObject:
   m_ObjectHideFlags: 0

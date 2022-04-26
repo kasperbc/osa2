@@ -5,6 +5,7 @@ using UnityEngine;
 public class TroopBehaviour : MonoBehaviour
 {
     public enum BehaviourMode { Idle, Moving, Attacking }
+
     GameObject diamond;
     public BehaviourMode mode;
 
@@ -17,6 +18,10 @@ public class TroopBehaviour : MonoBehaviour
 
     [Header("Combat")]
     [SerializeField] float attackRange;
+    [SerializeField] float attackSpeed;
+    [SerializeField] float damage;
+    [SerializeField] bool targetsPlayer;
+    [SerializeField] float playerDetectionRange;
     void Start()
     {
         mode = BehaviourMode.Idle;
@@ -24,13 +29,14 @@ public class TroopBehaviour : MonoBehaviour
         StartCoroutine(Emerge());
 
         diamond = GameObject.Find("Diamond");
-        target = diamond.transform;
     }
 
     void Update()
     {
         if (mode == BehaviourMode.Moving)
         {
+            SetTarget();
+
             MoveTowardsTarget();
         }
     }
@@ -48,6 +54,57 @@ public class TroopBehaviour : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, 1 * Time.deltaTime);
 
         transform.Translate(moveSpeed * Time.deltaTime * Vector3.forward);
+
+        if (Vector3.Distance(transform.position, target.position) <= attackRange)
+        {
+            mode = BehaviourMode.Attacking;
+            StartCoroutine(Attack());
+        }
+    }
+
+    void SetTarget()
+    {
+        if (targetsPlayer)
+        {
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+            GameObject nearestPlayer = players[0];
+            foreach (GameObject player in players)
+            {
+                float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+
+                if (distanceToPlayer <= playerDetectionRange)
+                {
+                    if (distanceToPlayer < Vector3.Distance(nearestPlayer.transform.position, transform.position))
+                        nearestPlayer = player;
+                }
+            }
+
+            if (nearestPlayer != null)
+            {
+                target = nearestPlayer.transform;
+                return;
+            }
+        }
+        
+        target = diamond.transform;
+    }
+
+    IEnumerator Attack()
+    {
+        yield return new WaitForSeconds(attackSpeed);
+
+        if (Vector3.Distance(transform.position, target.position) <= attackRange)
+        {
+            target.GetComponent<Health>().TakeDamage(damage);
+        }
+        else
+        {
+            mode = BehaviourMode.Moving;
+            yield return null;
+        }
+
+        StartCoroutine(Attack());
     }
 
     IEnumerator Emerge()

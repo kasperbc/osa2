@@ -22,7 +22,12 @@ public class SoundManager : MonoBehaviour
     {
         ClearEmptySources();
 
-        globalVolume = GameObject.Find("Volume").GetComponent<Slider>().value;
+        GameObject volumeBar = GameObject.Find("Volume");
+
+        if (volumeBar != null)
+        {
+            globalVolume = volumeBar.GetComponent<Slider>().value;
+        }
 
 
         AudioSource[] sources = GetComponents<AudioSource>();

@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
 
     private int wave = 0;
 
+    private List<GameObject> lobbyUI = new List<GameObject>();
+    private List<GameObject> invasionUI = new List<GameObject>();
+
     void Start()
     {
         if (instance == null)
@@ -48,6 +51,14 @@ public class GameManager : MonoBehaviour
         joinable = true;
 
         SoundManager.instance.PlaySound("whitenoise", 0.2f, 1, true, false);
+
+        lobbyUI.Add(GameObject.Find("Volume"));
+        lobbyUI.Add(GameObject.Find("TabIndicator"));
+        lobbyUI.Add(GameObject.Find("StartGame"));
+
+        invasionUI.Add(GameObject.Find("DiamondHealthBar"));
+
+        SetInvasionUI(false);
     }
 
     void Update()
@@ -521,6 +532,11 @@ public class GameManager : MonoBehaviour
 
         EnableFog();
 
+        SetLobbyUI(false);
+        SetInvasionUI(true);
+
+        GameObject.Find("Diamond").GetComponent<Health>().healthBar = GameObject.Find("DiamondHealthBarFill");
+
         StartCoroutine(StartWave());
     }
 
@@ -600,5 +616,21 @@ public class GameManager : MonoBehaviour
     void DisableFog()
     {
         RenderSettings.fog = false;
+    }
+
+    void SetLobbyUI(bool value)
+    {
+        foreach (GameObject o in lobbyUI)
+        {
+            o.SetActive(value);
+        }
+    }
+    
+    void SetInvasionUI(bool value)
+    {
+        foreach (GameObject o in invasionUI)
+        {
+            o.SetActive(value);
+        }
     }
 }
