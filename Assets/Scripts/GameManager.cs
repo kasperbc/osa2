@@ -544,11 +544,32 @@ public class GameManager : MonoBehaviour
     {
         wave++;
 
+        if (WaveManager.instance != null)
+        {
+            if (WaveManager.instance.GetWaveCount() < wave)
+            {
+                StartCoroutine(EndInvasionGame());
+
+                yield break;
+            }
+        }
+
         StartCoroutine(DisplayStatus("Wave " + wave + " incoming!"));
 
         yield return new WaitForSeconds(5);
 
+        WaveManager.instance.waveInProgression = true;
+
         StartCoroutine(SpawnWave());
+    }
+
+    public IEnumerator EndInvasionGame()
+    {
+        StartCoroutine(DisplayStatus("All waves complete! You win!"));
+
+        yield return new WaitForSeconds(5);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     IEnumerator SpawnWave()

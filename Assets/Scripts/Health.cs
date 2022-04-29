@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Health : MonoBehaviour
 {
@@ -19,6 +20,14 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        GameObject damageTextPrefab = Resources.Load<GameObject>("Prefabs/DamageText");
+
+        Vector3 spawnPos = transform.position;
+        spawnPos.y += 2;
+
+        GameObject damageText = Instantiate(damageTextPrefab, spawnPos, transform.rotation);
+        damageText.GetComponent<TextMeshPro>().text = amount.ToString();
+
         if (dead == true)
         {
             return;
@@ -44,7 +53,7 @@ public class Health : MonoBehaviour
         
         if (dyingParticle != null)
         {
-            Instantiate(dyingParticle, transform.position, Quaternion.identity);
+            Instantiate(dyingParticle, transform.position, transform.rotation);
         }
 
         if (hideOnDeath)

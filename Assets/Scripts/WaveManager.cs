@@ -12,6 +12,7 @@ public class WaveManager : MonoBehaviour
     private List<string> waves = new List<string>();
     [SerializeField]
     private List<GameObject> troops = new List<GameObject>();
+    public bool waveInProgression;
     void Start()
     {
         if (instance == null)
@@ -22,6 +23,19 @@ public class WaveManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    void Update()
+    {
+        if (waveInProgression)
+        {
+            GetWaveCompletion();
+        }
+    }
+
+    public int GetWaveCount()
+    {
+        return waves.Count;
     }
 
     public string[] ReadWave(int wave)
@@ -52,5 +66,17 @@ public class WaveManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void GetWaveCompletion()
+    {
+        GameObject[] troops = GameObject.FindGameObjectsWithTag("Troop");
+
+        if (troops.Length == 0)
+        {
+            waveInProgression = false;
+
+            StartCoroutine(GameManager.instance.StartWave());
+        }
     }
 }

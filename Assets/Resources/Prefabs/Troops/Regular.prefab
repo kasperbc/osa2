@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 110143921378171988}
   - component: {fileID: 4225592982479150620}
   - component: {fileID: 1248499659536549370}
+  - component: {fileID: -7073006157395679983}
   m_Layer: 0
   m_Name: Regular
-  m_TagString: Untagged
+  m_TagString: Troop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,10 +101,10 @@ MonoBehaviour:
   mode: 0
   spawnParticle: {fileID: 3390588438428353440, guid: 7af1bdc6adab57a479ec69d217357575, type: 3}
   moveSpeed: 5
-  attackRange: 3
+  attackRange: 4
   attackSpeed: 1
-  damage: 1
-  targetsPlayer: 1
+  damage: 5
+  targetsPlayer: 0
   playerDetectionRange: 15
 --- !u!95 &4225592982479150620
 Animator:
@@ -137,3 +138,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7073006157395679983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947312647070886367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a35fc6c2d34c894fad5bc759943aba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 5
+  health: 0
+  healthBar: {fileID: 0}
+  dyingParticle: {fileID: 1354638898917926343, guid: 68528c32dabfa3c4aa6c40534a2819cc, type: 3}
+  destroyOnDeath: 1
+  hideOnDeath: 0
+  dead: 0

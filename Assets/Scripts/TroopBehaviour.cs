@@ -120,6 +120,8 @@ public class TroopBehaviour : MonoBehaviour
 
         GetComponent<Collider>().isTrigger = false;
 
+        gameObject.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+
         mode = BehaviourMode.Moving;
     }
 }

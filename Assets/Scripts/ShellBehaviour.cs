@@ -67,6 +67,13 @@ public class ShellBehaviour : MonoBehaviour
             other.gameObject.GetComponent<Rigidbody>().AddForce(hitDirection * 2, ForceMode.Impulse);
         }
 
+        if (other.gameObject.CompareTag("Troop"))
+        {
+            Health hp = other.gameObject.GetComponent<Health>();
+
+            hp.TakeDamage(20);
+        }
+
         SoundManager.instance.PlaySound("explosion", 0.15f, Random.Range(0.65f, 0.75f), false, false);
 
         Destroy(gameObject);

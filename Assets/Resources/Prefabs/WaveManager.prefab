@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - r100-5-r1
+  - r2-1-r2-1-r2-1-r2-1-r2
+  - r4-1-r4-1-r4-1-r4-1-r4
   troops:
   - {fileID: 947312647070886367, guid: 269f42c9a09dc174caabdeb51b84e483, type: 3}
