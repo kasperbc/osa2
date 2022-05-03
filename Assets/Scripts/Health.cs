@@ -25,9 +25,6 @@ public class Health : MonoBehaviour
         Vector3 spawnPos = transform.position;
         spawnPos.y += 2;
 
-        GameObject damageText = Instantiate(damageTextPrefab, spawnPos, transform.rotation);
-        damageText.GetComponent<TextMeshPro>().text = amount.ToString();
-
         if (dead == true)
         {
             return;

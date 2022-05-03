@@ -46,5 +46,10 @@ MonoBehaviour:
   waves:
   - r2-1-r2-1-r2-1-r2-1-r2
   - r4-1-r4-1-r4-1-r4-1-r4
+  - r4-1-a1-1-r4-1-a1-1-r4-1-a1-1-r4-1-a1-1-r4
+  - b2-1-r5-1-r5-1-r5-1-r5-1-r5-1-r5
   troops:
   - {fileID: 947312647070886367, guid: 269f42c9a09dc174caabdeb51b84e483, type: 3}
+  - {fileID: 4945749457107039610, guid: 2bf2d3216fa90944cacad02fe2fcc346, type: 3}
+  - {fileID: 5248150414673328446, guid: a29828516e770ec4ba1461db02778b84, type: 3}
+  waveInProgression: 0

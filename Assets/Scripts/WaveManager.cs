@@ -6,7 +6,7 @@ public class WaveManager : MonoBehaviour
 {
     public static WaveManager instance;
 
-    public enum Troop { Regular }
+    public enum Troop { Regular, Aggressive, Beefy }
 
     [SerializeField]
     private List<string> waves = new List<string>();
@@ -63,6 +63,10 @@ public class WaveManager : MonoBehaviour
         {
             case Troop.Regular:
                 return troops[0];
+            case Troop.Aggressive:
+                return troops[1];
+            case Troop.Beefy:
+                return troops[2];
         }
 
         return null;

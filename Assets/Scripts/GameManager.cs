@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     private List<GameObject> lobbyUI = new List<GameObject>();
     private List<GameObject> invasionUI = new List<GameObject>();
 
+    private bool debugMode;
+
     void Start()
     {
         if (instance == null)
@@ -59,6 +61,11 @@ public class GameManager : MonoBehaviour
         invasionUI.Add(GameObject.Find("DiamondHealthBar"));
 
         SetInvasionUI(false);
+
+        if (Application.isEditor)
+        {
+            debugMode = true;
+        }
     }
 
     void Update()
@@ -69,6 +76,14 @@ public class GameManager : MonoBehaviour
         }
 
         ListenForPlayerLeaves();
+
+        if (debugMode)
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+
+            }
+        }
     }
 
     void ListenForPlayerJoins()
@@ -586,10 +601,19 @@ public class GameManager : MonoBehaviour
             }
 
             char[] waveChars = wave.ToCharArray();
+            char firstChar = waveChars[0];
 
-            if (waveChars[0] == 'r')
+            switch (waveChars[0])
             {
-                SpawnTroop(WaveManager.Troop.Regular, wave);
+                case 'r':
+                    SpawnTroop(WaveManager.Troop.Regular, wave);
+                    break;
+                case 'a':
+                    SpawnTroop(WaveManager.Troop.Aggressive, wave);
+                    break;
+                case 'b':
+                    SpawnTroop(WaveManager.Troop.Beefy, wave);
+                    break;
             }
         }
     }
