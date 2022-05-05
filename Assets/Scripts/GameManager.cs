@@ -25,8 +25,11 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> lobbyUI = new List<GameObject>();
     private List<GameObject> invasionUI = new List<GameObject>();
+    private GameObject upgradeText;
 
     private bool debugMode;
+
+    private bool upgradeMenuActive;
 
     void Start()
     {
@@ -60,6 +63,9 @@ public class GameManager : MonoBehaviour
 
         invasionUI.Add(GameObject.Find("DiamondHealthBar"));
 
+        upgradeText = GameObject.Find("Upgrade Text");
+        upgradeText.SetActive(false);
+
         SetInvasionUI(false);
 
         if (Application.isEditor)
@@ -81,6 +87,11 @@ public class GameManager : MonoBehaviour
         {
             StopCoroutine(SpawnWave());
             StartCoroutine(StartWave());
+        }
+
+        if (upgradeMenuActive)
+        {
+            ListenForUpgradeSelect();
         }
     }
 
@@ -115,6 +126,22 @@ public class GameManager : MonoBehaviour
 
                 RemovePlayer(i);
             }
+        }
+    }
+
+    void ListenForUpgradeSelect()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            UpgradePlayers(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            UpgradePlayers(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            UpgradePlayers(3);
         }
     }
 
@@ -684,5 +711,40 @@ public class GameManager : MonoBehaviour
         {
             o.SetActive(value);
         }
+    }
+
+    public void SetUpgrades(bool value)
+    {
+        upgradeText.SetActive(value);
+
+        upgradeMenuActive = value;
+    }
+
+    void UpgradePlayers(int upgrade)
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject p in players)
+        {
+            switch (upgrade)
+            {
+                case 1:
+                    p.GetComponent<Health>().AddMaxHealth(20);
+                    p.GetComponent<PlayerShoot>().damage -= 10;
+                    break;
+                case 2:
+                    p.GetComponent<PlayerShoot>().damage += 20;
+                    p.GetComponent<PlayerShoot>().reloadTime += 0.125f;
+                    break;
+                case 3:
+                    p.GetComponent<PlayerShoot>().reloadTime -= 0.25f;
+                    p.GetComponent<Health>().AddMaxHealth(-10);
+                    break;
+            }
+        }
+
+        SetUpgrades(false);
+
+        StartCoroutine(SpawnWave());
     }
 }

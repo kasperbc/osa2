@@ -13,6 +13,7 @@ public class PlayerShoot : MonoBehaviour
     private bool onCooldown;    // Is the tank fire on cooldown/reloading?
     public GameObject reloadBar;    // The reload UI circle
     public GameObject crossHair;
+    public int damage;
 
     public float reloadTime;    // The time it takes for the player to reload
 
@@ -23,6 +24,7 @@ public class PlayerShoot : MonoBehaviour
         barrel = gunModel.transform.GetChild(0).gameObject;
 
         reloadTime = 0.75f;
+        damage = 20;
     }
 
     public void Aim(Vector3 direction)

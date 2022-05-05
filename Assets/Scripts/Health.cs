@@ -63,4 +63,14 @@ public class Health : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void AddMaxHealth(float value)
+    {
+        maxHealth += value;
+    }
+
+    public void FullHeal()
+    {
+        health = maxHealth;
+    }
 }

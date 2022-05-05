@@ -86,7 +86,7 @@ public class WaveManager : MonoBehaviour
         {
             waveInProgression = false;
 
-            StartCoroutine(GameManager.instance.StartWave());
+            GameManager.instance.SetUpgrades(true);
         }
     }
 }
