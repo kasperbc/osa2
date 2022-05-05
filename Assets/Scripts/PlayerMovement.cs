@@ -16,10 +16,6 @@ public class PlayerMovement : MonoBehaviour
     private bool isBoosting;    // Is the player boosting?
     private float boostMeter;   // The current boost level
     private bool boostDepleted;   // Has the boost been depleted?
-
-    private Image boostImage; // The boost UI component
-
-    [SerializeField] bool p2;
     void Start()
     {
         boostMeter = 5;
@@ -71,26 +67,6 @@ public class PlayerMovement : MonoBehaviour
     {
         // Boost the player if able to
         isBoosting = boostMeter > 0 && !boostDepleted;
-    }
-
-    void DisplayBoostOnUI()
-    {
-        // Show the boost meter on the boost bar
-        boostImage.fillAmount = boostMeter / 5;
-        GameObject.Find("BoostValue").GetComponent<Text>().text = Mathf.Round(boostMeter / 5 * 100).ToString() + "%";
-
-        // Is the boost depleted?
-        if (boostDepleted)
-        {
-            // If yes, set the UI boost bar to be transparent
-            boostImage.color = new Color(1, 0.5f, 0, 0.3f);
-            // If the boost meter has been on cooldown enough activate it again
-            if (boostMeter > 1)
-            {
-                boostDepleted = false;
-                boostImage.color = new Color(1, 0.5f, 0, 1f);
-            }
-        }
     }
 
     void IncreaseBoost(float amount)

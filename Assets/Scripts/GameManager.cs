@@ -77,12 +77,10 @@ public class GameManager : MonoBehaviour
 
         ListenForPlayerLeaves();
 
-        if (debugMode)
+        if (debugMode && Input.GetKeyDown(KeyCode.P))
         {
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-
-            }
+            StopCoroutine(SpawnWave());
+            StartCoroutine(StartWave());
         }
     }
 
@@ -612,7 +610,16 @@ public class GameManager : MonoBehaviour
                     SpawnTroop(WaveManager.Troop.Aggressive, wave);
                     break;
                 case 'b':
-                    SpawnTroop(WaveManager.Troop.Beefy, wave);
+                    SpawnTroop(WaveManager.Troop.Boss, wave);
+                    break;
+                case 'f':
+                    SpawnTroop(WaveManager.Troop.Fast, wave);
+                    break;
+                case 's':
+                    SpawnTroop(WaveManager.Troop.Bomber, wave);
+                    break;
+                case 'p':
+                    SpawnTroop(WaveManager.Troop.PlayerBomber, wave);
                     break;
             }
         }

@@ -11,15 +11,18 @@ public class PlayerShoot : MonoBehaviour
     private GameObject shell;   // The shell that the tank fires
     public Camera cam;                 // The camera that is following the player
     private bool onCooldown;    // Is the tank fire on cooldown/reloading?
-    [SerializeField] bool p2;   // Is the tank player 2?
     public GameObject reloadBar;    // The reload UI circle
     public GameObject crossHair;
+
+    public float reloadTime;    // The time it takes for the player to reload
 
     Vector2 rotation = Vector2.zero;
 
     void Start()
     {
         barrel = gunModel.transform.GetChild(0).gameObject;
+
+        reloadTime = 0.75f;
     }
 
     public void Aim(Vector3 direction)
@@ -42,7 +45,7 @@ public class PlayerShoot : MonoBehaviour
 
         // Activate cooldown
         onCooldown = true;
-        Invoke(nameof(DeactivateCooldown), 0.5f);
+        Invoke(nameof(DeactivateCooldown), reloadTime);
 
         // Fire the shell
         Vector3 spawnPos = gunModel.transform.position + gunModel.transform.forward * 2;
@@ -59,6 +62,7 @@ public class PlayerShoot : MonoBehaviour
 
         // Play reload animation
         reloadBar.GetComponent<Animator>().SetTrigger("Reload");
+        reloadBar.GetComponent<Animator>().SetFloat("ReloadSpeed", 1 / reloadTime);
 
         SoundManager.instance.PlaySound("fire", 0.6f, Random.Range(0.9f, 1.1f), false, false);
     }
