@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private GameObject playerVirtualCamera;
     private GameObject reloadBar;
     private GameObject crosshair;
+    private GameObject playerHealthBar;
 
     private bool cursorLocked;
     private bool joinable;
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
         playerVirtualCamera = Resources.Load<GameObject>("Prefabs/Virtual Camera");
         reloadBar = Resources.Load<GameObject>("Prefabs/Reload Bar");
         crosshair = Resources.Load<GameObject>("Prefabs/Crosshair");
+        playerHealthBar = Resources.Load<GameObject>("Prefabs/Player Health Bar");
 
         upgradeLevels[0] = 1;
         upgradeLevels[1] = 1;
@@ -235,6 +237,7 @@ public class GameManager : MonoBehaviour
         GameObject spawnedVCam = Instantiate(playerVirtualCamera);
         GameObject spawnedRBar = Instantiate(reloadBar, GameObject.Find("Canvas").transform);
         GameObject spawnedCrosshair = Instantiate(crosshair, GameObject.Find("Canvas").transform);
+        GameObject spawnedHealthBar = Instantiate(playerHealthBar, GameObject.Find("Canvas").transform);
 
         // Set names
         spawnedPlayer.name = "Player " + playerNo;
@@ -268,6 +271,8 @@ public class GameManager : MonoBehaviour
         // Link player to UI components
         shootComponent.reloadBar = spawnedRBar;
         shootComponent.crossHair = spawnedCrosshair;
+        spawnedPlayer.GetComponent<Health>().healthBar = spawnedHealthBar;
+        spawnedPlayer.GetComponent<Health>().healthText = spawnedHealthBar.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
         // Setup splitscreen
         switch (playerCount)
@@ -382,6 +387,7 @@ public class GameManager : MonoBehaviour
         GameObject vCam = cam.GetComponent<CinemachineBrain>().ActiveVirtualCamera.VirtualCameraGameObject;
         GameObject rBar = player.GetComponent<PlayerShoot>().reloadBar;
         GameObject cHair = player.GetComponent<PlayerShoot>().crossHair;
+        GameObject hBar = player.GetComponent<Health>().healthBar;
 
 
         Destroy(player);
@@ -389,6 +395,7 @@ public class GameManager : MonoBehaviour
         Destroy(vCam);
         Destroy(rBar);
         Destroy(cHair);
+        Destroy(hBar);
 
         print("Removed Player " + number);
 
@@ -522,12 +529,18 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < players.Length; i++)
         {
             PlayerShoot shootComponent = players[i].GetComponent<PlayerShoot>();
+            Health healthComponent = players[i].GetComponent<Health>();
             Camera cam = shootComponent.cam;
 
             Vector2 centerPos = GetCamCenterRectPosition(cam);
 
+            Rect healthBarPos = Rect.zero;
+            healthBarPos = GUIUtility.ScreenToGUIRect(cam.rect);
+
             shootComponent.reloadBar.GetComponent<RectTransform>().localPosition = centerPos;
             shootComponent.crossHair.GetComponent<RectTransform>().localPosition = centerPos;
+            //healthComponent.healthBar.GetComponent<RectTransform>().localPosition = healthBarPos;
+            
         }
     }
 
@@ -583,6 +596,7 @@ public class GameManager : MonoBehaviour
         SetInvasionUI(true);
 
         GameObject.Find("Diamond").GetComponent<Health>().healthBar = GameObject.Find("DiamondHealthBarFill");
+        GameObject.Find("Diamond").GetComponent<Health>().healthText = GameObject.Find("DiamondHealthText").GetComponent<TextMeshProUGUI>();
 
         StartCoroutine(StartWave());
     }
@@ -724,6 +738,9 @@ public class GameManager : MonoBehaviour
     {
         upgradeText.SetActive(value);
 
+        if (value)
+            SoundManager.instance.PlaySound("goal");
+
         string upgradeTextString = "Upgrade available!\n\n" +
             "Press 1 to upgrade Health (Level " + upgradeLevels[0] + ")\n" +
             "Press 2 to upgrade Damage (Level " + upgradeLevels[1] + ")\n" +
@@ -760,5 +777,10 @@ public class GameManager : MonoBehaviour
         SetUpgrades(false);
 
         StartCoroutine(StartWave());
+    }
+
+    public int[] GetLevels()
+    {
+        return upgradeLevels;
     }
 }

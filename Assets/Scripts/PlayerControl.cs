@@ -40,7 +40,7 @@ public class PlayerControl : MonoBehaviour
         // Boost
         if (GetBoostKey())
         {
-            movementComponent.Boost();
+            //movementComponent.Boost();
         }
 
         // Aim

@@ -9,6 +9,7 @@ public class Health : MonoBehaviour
     [SerializeField] float maxHealth;
     public float health;
     public GameObject healthBar;
+    public TMPro.TextMeshProUGUI healthText;
     [SerializeField] GameObject dyingParticle;
     [SerializeField] bool destroyOnDeath;
     [SerializeField] bool hideOnDeath;
@@ -20,11 +21,6 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        GameObject damageTextPrefab = Resources.Load<GameObject>("Prefabs/DamageText");
-
-        Vector3 spawnPos = transform.position;
-        spawnPos.y += 2;
-
         if (dead == true)
         {
             return;
@@ -32,8 +28,7 @@ public class Health : MonoBehaviour
         
         health -= amount;
 
-        if (healthBar != null)
-            healthBar.GetComponent<Image>().fillAmount = health / maxHealth;
+        UpdateHealthUI();
 
         if (health < 0)
         {
@@ -72,5 +67,25 @@ public class Health : MonoBehaviour
     public void FullHeal()
     {
         health = maxHealth;
+
+        UpdateHealthUI();
+    }
+
+    public void Heal(float value)
+    {
+        health += value;
+
+        health = Mathf.Clamp(health, 0, maxHealth);
+
+        UpdateHealthUI();
+    }
+
+    void UpdateHealthUI()
+    {
+        if (healthBar != null)
+            healthBar.GetComponent<Image>().fillAmount = health / maxHealth;
+
+        if (healthText != null)
+            healthText.text = health + "/" + maxHealth;
     }
 }

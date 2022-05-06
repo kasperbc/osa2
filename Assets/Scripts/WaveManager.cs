@@ -86,6 +86,8 @@ public class WaveManager : MonoBehaviour
         {
             waveInProgression = false;
 
+            GameObject.Find("Diamond").GetComponent<Health>().Heal(333);
+
             GameManager.instance.SetUpgrades(true);
         }
     }

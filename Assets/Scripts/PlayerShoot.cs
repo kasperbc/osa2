@@ -68,7 +68,13 @@ public class PlayerShoot : MonoBehaviour
         reloadBar.GetComponent<Animator>().SetTrigger("Reload");
         reloadBar.GetComponent<Animator>().SetFloat("ReloadSpeed", 1 / reloadTime);
 
-        SoundManager.instance.PlaySound("fire", 0.6f, Random.Range(0.9f, 1.1f), false, false);
+        int level = GameManager.instance.GetLevels()[1];
+
+        float pitch = 1 - (level / 10);
+        pitch = Mathf.Clamp(pitch, 0.5f, 1f);
+        
+
+        SoundManager.instance.PlaySound("fire", 0.6f, Random.Range(pitch - 0.1f, pitch + 0.1f), false, false);
     }
 
     void DeactivateCooldown()
