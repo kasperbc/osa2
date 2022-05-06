@@ -13,9 +13,11 @@ public class PlayerShoot : MonoBehaviour
     private bool onCooldown;    // Is the tank fire on cooldown/reloading?
     public GameObject reloadBar;    // The reload UI circle
     public GameObject crossHair;
-    public int damage;
 
+    public int damage;
     public float reloadTime;    // The time it takes for the player to reload
+
+    public int[] levels;
 
     Vector2 rotation = Vector2.zero;
 

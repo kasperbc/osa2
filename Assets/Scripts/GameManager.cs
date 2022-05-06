@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Cinemachine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
 
     private bool upgradeMenuActive;
 
+    private int[] upgradeLevels = new int[3];
+
     void Start()
     {
         if (instance == null)
@@ -48,6 +51,10 @@ public class GameManager : MonoBehaviour
         playerVirtualCamera = Resources.Load<GameObject>("Prefabs/Virtual Camera");
         reloadBar = Resources.Load<GameObject>("Prefabs/Reload Bar");
         crosshair = Resources.Load<GameObject>("Prefabs/Crosshair");
+
+        upgradeLevels[0] = 1;
+        upgradeLevels[1] = 1;
+        upgradeLevels[2] = 1;
 
         LoadMap("Lobby");
 
@@ -717,6 +724,13 @@ public class GameManager : MonoBehaviour
     {
         upgradeText.SetActive(value);
 
+        string upgradeTextString = "Upgrade available!\n\n" +
+            "Press 1 to upgrade Health (Level " + upgradeLevels[0] + ")\n" +
+            "Press 2 to upgrade Damage (Level " + upgradeLevels[1] + ")\n" +
+            "Press 3 to upgrade Fire Rate (Level " + upgradeLevels[2] + ")";
+
+        upgradeText.GetComponent<TextMeshProUGUI>().text = upgradeTextString;
+
         upgradeMenuActive = value;
     }
 
@@ -730,21 +744,21 @@ public class GameManager : MonoBehaviour
             {
                 case 1:
                     p.GetComponent<Health>().AddMaxHealth(20);
-                    p.GetComponent<PlayerShoot>().damage -= 10;
+                    upgradeLevels[0]++;
                     break;
                 case 2:
-                    p.GetComponent<PlayerShoot>().damage += 20;
-                    p.GetComponent<PlayerShoot>().reloadTime += 0.125f;
+                    p.GetComponent<PlayerShoot>().damage += 10;
+                    upgradeLevels[1]++;
                     break;
                 case 3:
-                    p.GetComponent<PlayerShoot>().reloadTime -= 0.25f;
-                    p.GetComponent<Health>().AddMaxHealth(-10);
+                    p.GetComponent<PlayerShoot>().reloadTime /= 1.25f;
+                    upgradeLevels[2]++;
                     break;
             }
         }
 
         SetUpgrades(false);
 
-        StartCoroutine(SpawnWave());
+        StartCoroutine(StartWave());
     }
 }
