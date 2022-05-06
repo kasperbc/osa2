@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private GameObject reloadBar;
     private GameObject crosshair;
     private GameObject playerHealthBar;
+    private GameObject playerCanvas;
 
     private bool cursorLocked;
     private bool joinable;
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
         reloadBar = Resources.Load<GameObject>("Prefabs/Reload Bar");
         crosshair = Resources.Load<GameObject>("Prefabs/Crosshair");
         playerHealthBar = Resources.Load<GameObject>("Prefabs/Player Health Bar");
+        playerCanvas = Resources.Load<GameObject>("Prefabs/Player Canvas");
 
         upgradeLevels[0] = 1;
         upgradeLevels[1] = 1;
@@ -235,16 +237,14 @@ public class GameManager : MonoBehaviour
         GameObject spawnedPlayer = Instantiate(player);
         GameObject spawnedCam = Instantiate(playerCamera);
         GameObject spawnedVCam = Instantiate(playerVirtualCamera);
-        GameObject spawnedRBar = Instantiate(reloadBar, GameObject.Find("Canvas").transform);
-        GameObject spawnedCrosshair = Instantiate(crosshair, GameObject.Find("Canvas").transform);
-        GameObject spawnedHealthBar = Instantiate(playerHealthBar, GameObject.Find("Canvas").transform);
+
+        GameObject spawnedCanvas = Instantiate(playerCanvas);
 
         // Set names
         spawnedPlayer.name = "Player " + playerNo;
         spawnedCam.name = "Player " + playerNo + " Camera";
         spawnedVCam.name = "Player " + playerNo + " Virtual Camera";
-        spawnedRBar.name = "Player " + playerNo + " Reload Bar";
-        spawnedCrosshair.name = "Player " + playerNo + " Crosshair";
+        spawnedCanvas.name = "Player " + playerNo + " Canvas";
 
         PlayerShoot shootComponent = spawnedPlayer.GetComponent<PlayerShoot>();
         Camera cam = spawnedCam.GetComponent<Camera>();
@@ -261,6 +261,9 @@ public class GameManager : MonoBehaviour
         spawnedVCam.layer = camLayer;
         cam.cullingMask |= 1 << camLayer;
 
+        // Link canvas to camera
+        spawnedCanvas.GetComponent<Canvas>().worldCamera = spawnedCam.GetComponent<Camera>();
+        spawnedCanvas.GetComponent<Canvas>().planeDistance = 0.35f;
 
         // Link player to camera
         shootComponent.cam = spawnedCam.GetComponent<Camera>();
@@ -269,10 +272,10 @@ public class GameManager : MonoBehaviour
         spawnedVCam.GetComponent<CinemachineVirtualCamera>().Follow = spawnedPlayer.transform.GetChild(1);
 
         // Link player to UI components
-        shootComponent.reloadBar = spawnedRBar;
-        shootComponent.crossHair = spawnedCrosshair;
-        spawnedPlayer.GetComponent<Health>().healthBar = spawnedHealthBar;
-        spawnedPlayer.GetComponent<Health>().healthText = spawnedHealthBar.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        shootComponent.reloadBar = spawnedCanvas.transform.GetChild(2).gameObject;
+        shootComponent.crossHair = spawnedCanvas.transform.GetChild(1).gameObject;
+        spawnedPlayer.GetComponent<Health>().healthBar = spawnedCanvas.transform.GetChild(0).gameObject;
+        spawnedPlayer.GetComponent<Health>().healthText = spawnedCanvas.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
         // Setup splitscreen
         switch (playerCount)
@@ -355,8 +358,6 @@ public class GameManager : MonoBehaviour
         spawnedPlayer.transform.GetChild(1).GetComponent<Renderer>().material = Resources.Load<Material>("Materials/Tank/" + color + "Barrel");
         spawnedPlayer.transform.GetChild(1).GetChild(0).GetComponent<Renderer>().material = Resources.Load<Material>("Materials/Tank/" + color + "Barrel");
 
-        SetUIElements();
-
         print("Spawned Player " + playerNo);
     }
 
@@ -425,7 +426,6 @@ public class GameManager : MonoBehaviour
 
 
         SetSplitScreenCameras();
-        SetUIElements();
     }
 
     private MapData GetMapData()
@@ -464,7 +464,6 @@ public class GameManager : MonoBehaviour
 
         SpawnPlayer(playerCount, GetMapData().spawnpoints[playerCount - 1], controllerPort);
         SetSplitScreenCameras();
-        SetUIElements();
 
         StartCoroutine(DisplayStatus("Player " + playerCount + " has joined!"));
     }
@@ -520,37 +519,6 @@ public class GameManager : MonoBehaviour
                 cameras[3].rect = new Rect(0.5f, 0, 0.5f, 0.5f);
                 break;
         }
-    }
-
-    public void SetUIElements()
-    {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-
-        for (int i = 0; i < players.Length; i++)
-        {
-            PlayerShoot shootComponent = players[i].GetComponent<PlayerShoot>();
-            Health healthComponent = players[i].GetComponent<Health>();
-            Camera cam = shootComponent.cam;
-
-            Vector2 centerPos = GetCamCenterRectPosition(cam);
-
-            Rect healthBarPos = Rect.zero;
-            healthBarPos = GUIUtility.ScreenToGUIRect(cam.rect);
-
-            shootComponent.reloadBar.GetComponent<RectTransform>().localPosition = centerPos;
-            shootComponent.crossHair.GetComponent<RectTransform>().localPosition = centerPos;
-            //healthComponent.healthBar.GetComponent<RectTransform>().localPosition = healthBarPos;
-            
-        }
-    }
-
-    Vector2 GetCamCenterRectPosition(Camera cam)
-    {
-        Vector2 centerPos = Vector2.zero;
-        centerPos.x = (cam.rect.x * 4 - 1 + ((cam.rect.width - 0.5f) * 2)) * 200;
-        centerPos.y = (cam.rect.y * 4 - 1 + ((cam.rect.height - 0.5f) * 2)) * 120;
-
-        return centerPos;
     }
 
     public void UnloadMap(bool removePlayers)
