@@ -86,7 +86,14 @@ public class WaveManager : MonoBehaviour
         {
             waveInProgression = false;
 
-            GameObject.Find("Diamond").GetComponent<Health>().Heal(333);
+            GameObject.Find("Diamond").GetComponent<Health>().Heal(300);
+
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+            foreach (GameObject p in players)
+            {
+                p.GetComponent<Health>().FullHeal();
+            }
 
             GameManager.instance.SetUpgrades(true);
         }
