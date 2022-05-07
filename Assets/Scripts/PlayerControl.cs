@@ -13,6 +13,7 @@ public class PlayerControl : MonoBehaviour
 
     PlayerMovement movementComponent;
     PlayerShoot shootComponent;
+    UpgradeManager upgradeComponent;
 
     float vertical;     // Used for up/down movement
     float horizontal;   // Used for left/right movement
@@ -21,6 +22,7 @@ public class PlayerControl : MonoBehaviour
     {
         movementComponent = GetComponent<PlayerMovement>();
         shootComponent = GetComponent<PlayerShoot>();
+        upgradeComponent = GetComponent<UpgradeManager>();
     }
 
     // Update is called once per frame
@@ -50,6 +52,13 @@ public class PlayerControl : MonoBehaviour
         if (GetShootKey())
         {
             shootComponent.Shoot();
+        }
+
+        // Upgrade
+        int upgradeKey = GetUpgradeKeys();
+        if (upgradeKey != 0)
+        {
+            upgradeComponent.SelectUpgrade(upgradeKey);
         }
 
         if (Input.GetKeyDown(KeyCode.Tab) && controlMethod == ControlMethod.MouseAndKeyboard)
@@ -147,6 +156,36 @@ public class PlayerControl : MonoBehaviour
         }
 
         return Input.GetKey(boostKey);
+    }
+
+    int GetUpgradeKeys()
+    {
+        KeyCode[] upgradeKeys = {KeyCode.None, KeyCode.None, KeyCode.None};
+
+        switch (controlMethod)
+        {
+            case ControlMethod.MouseAndKeyboard:
+                upgradeKeys[0] = KeyCode.Alpha1;
+                upgradeKeys[1] = KeyCode.Alpha2;
+                upgradeKeys[2] = KeyCode.Alpha3;
+                upgradeKeys[2] = KeyCode.X;
+                break;
+            case ControlMethod.PS4:
+                upgradeKeys[0] = GetJoystickButton(KeyCode.JoystickButton0);
+                upgradeKeys[1] = GetJoystickButton(KeyCode.JoystickButton3);
+                upgradeKeys[2] = GetJoystickButton(KeyCode.JoystickButton2);
+                upgradeKeys[2] = GetJoystickButton(KeyCode.JoystickButton1);
+                break;
+        }
+
+        if (Input.GetKeyDown(upgradeKeys[0]))
+            return 1;
+        else if (Input.GetKeyDown(upgradeKeys[1]))
+            return 2;
+        else if (Input.GetKeyDown(upgradeKeys[2]))
+            return 3;
+        else
+            return 0;
     }
 
     bool GetShootKey()

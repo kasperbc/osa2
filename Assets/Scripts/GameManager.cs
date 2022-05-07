@@ -15,9 +15,6 @@ public class GameManager : MonoBehaviour
     private GameObject player;
     private GameObject playerCamera;
     private GameObject playerVirtualCamera;
-    private GameObject reloadBar;
-    private GameObject crosshair;
-    private GameObject playerHealthBar;
     private GameObject playerCanvas;
 
     private bool cursorLocked;
@@ -28,13 +25,8 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> lobbyUI = new List<GameObject>();
     private List<GameObject> invasionUI = new List<GameObject>();
-    private GameObject upgradeText;
 
     private bool debugMode;
-
-    private bool upgradeMenuActive;
-
-    private int[] upgradeLevels = new int[3];
 
     void Start()
     {
@@ -51,14 +43,7 @@ public class GameManager : MonoBehaviour
         player = Resources.Load<GameObject>("Prefabs/Player");
         playerCamera = Resources.Load<GameObject>("Prefabs/Player Camera");
         playerVirtualCamera = Resources.Load<GameObject>("Prefabs/Virtual Camera");
-        reloadBar = Resources.Load<GameObject>("Prefabs/Reload Bar");
-        crosshair = Resources.Load<GameObject>("Prefabs/Crosshair");
-        playerHealthBar = Resources.Load<GameObject>("Prefabs/Player Health Bar");
         playerCanvas = Resources.Load<GameObject>("Prefabs/Player Canvas");
-
-        upgradeLevels[0] = 1;
-        upgradeLevels[1] = 1;
-        upgradeLevels[2] = 1;
 
         LoadMap("Lobby");
 
@@ -70,12 +55,9 @@ public class GameManager : MonoBehaviour
 
         lobbyUI.Add(GameObject.Find("Volume"));
         lobbyUI.Add(GameObject.Find("TabIndicator"));
-        lobbyUI.Add(GameObject.Find("StartGame"));
+        lobbyUI.Add(GameObject.Find("EnterStart"));
 
         invasionUI.Add(GameObject.Find("DiamondHealthBar"));
-
-        upgradeText = GameObject.Find("Upgrade Text");
-        upgradeText.SetActive(false);
 
         SetInvasionUI(false);
 
@@ -90,6 +72,7 @@ public class GameManager : MonoBehaviour
         if (joinable)
         {
             ListenForPlayerJoins();
+            ListenForStart();
         }
 
         ListenForPlayerLeaves();
@@ -99,10 +82,13 @@ public class GameManager : MonoBehaviour
             StopCoroutine(SpawnWave());
             StartCoroutine(StartWave());
         }
+    }
 
-        if (upgradeMenuActive)
+    void ListenForStart()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            ListenForUpgradeSelect();
+            StartInvasionGame();
         }
     }
 
@@ -116,7 +102,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            if (Input.GetKeyDown((KeyCode)330 + (20 * i)))
+            if (Input.GetKeyDown((KeyCode)331 + (20 * i)))
             {
                 AddPlayer(i);
             }
@@ -137,22 +123,6 @@ public class GameManager : MonoBehaviour
 
                 RemovePlayer(i);
             }
-        }
-    }
-
-    void ListenForUpgradeSelect()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            UpgradePlayers(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            UpgradePlayers(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            UpgradePlayers(3);
         }
     }
 
@@ -248,6 +218,7 @@ public class GameManager : MonoBehaviour
 
         PlayerShoot shootComponent = spawnedPlayer.GetComponent<PlayerShoot>();
         Camera cam = spawnedCam.GetComponent<Camera>();
+        UpgradeManager upgradeComponent = spawnedPlayer.GetComponent<UpgradeManager>();
 
         // Destroy duplicate audio listeners
         if (playerNo > 1)
@@ -276,6 +247,9 @@ public class GameManager : MonoBehaviour
         shootComponent.crossHair = spawnedCanvas.transform.GetChild(1).gameObject;
         spawnedPlayer.GetComponent<Health>().healthBar = spawnedCanvas.transform.GetChild(0).gameObject;
         spawnedPlayer.GetComponent<Health>().healthText = spawnedCanvas.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+
+        // Link player to upgrade panel
+        upgradeComponent.upgradePanel = spawnedCanvas.transform.GetChild(3).gameObject;
 
         // Setup splitscreen
         switch (playerCount)
@@ -702,53 +676,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetUpgrades(bool value)
+    public int GetPlayerCount()
     {
-        upgradeText.SetActive(value);
-
-        if (value)
-            SoundManager.instance.PlaySound("goal");
-
-        string upgradeTextString = "Upgrade available!\n\n" +
-            "Press 1 to upgrade Health (Level " + upgradeLevels[0] + ")\n" +
-            "Press 2 to upgrade Damage (Level " + upgradeLevels[1] + ")\n" +
-            "Press 3 to upgrade Fire Rate (Level " + upgradeLevels[2] + ")";
-
-        upgradeText.GetComponent<TextMeshProUGUI>().text = upgradeTextString;
-
-        upgradeMenuActive = value;
-    }
-
-    void UpgradePlayers(int upgrade)
-    {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-
-        foreach (GameObject p in players)
-        {
-            switch (upgrade)
-            {
-                case 1:
-                    p.GetComponent<Health>().AddMaxHealth(20);
-                    upgradeLevels[0]++;
-                    break;
-                case 2:
-                    p.GetComponent<PlayerShoot>().damage += 10;
-                    upgradeLevels[1]++;
-                    break;
-                case 3:
-                    p.GetComponent<PlayerShoot>().reloadTime /= 1.25f;
-                    upgradeLevels[2]++;
-                    break;
-            }
-        }
-
-        SetUpgrades(false);
-
-        StartCoroutine(StartWave());
-    }
-
-    public int[] GetLevels()
-    {
-        return upgradeLevels;
+        return playerCount;
     }
 }

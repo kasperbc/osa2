@@ -93,9 +93,8 @@ public class WaveManager : MonoBehaviour
             foreach (GameObject p in players)
             {
                 p.GetComponent<Health>().FullHeal();
+                p.GetComponent<UpgradeManager>().OpenUpgradeMenu();
             }
-
-            GameManager.instance.SetUpgrades(true);
         }
     }
 }

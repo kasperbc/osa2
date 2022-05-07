@@ -68,9 +68,7 @@ public class PlayerShoot : MonoBehaviour
         reloadBar.GetComponent<Animator>().SetTrigger("Reload");
         reloadBar.GetComponent<Animator>().SetFloat("ReloadSpeed", 1 / reloadTime);
 
-        int level = GameManager.instance.GetLevels()[1];
-
-        float pitch = 1 - (level / 10);
+        float pitch = 1;
         pitch = Mathf.Clamp(pitch, 0.5f, 1f);
         
 
