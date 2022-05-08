@@ -106,6 +106,7 @@ MonoBehaviour:
   damage: 5
   targetsPlayer: 0
   playerDetectionRange: 15
+  dieAfterAttack: 0
 --- !u!95 &4225592982479150620
 Animator:
   serializedVersion: 3
@@ -150,9 +151,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a35fc6c2d34c894fad5bc759943aba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
+  maxHealth: 15
   health: 0
   healthBar: {fileID: 0}
+  healthText: {fileID: 0}
   dyingParticle: {fileID: 1354638898917926343, guid: 68528c32dabfa3c4aa6c40534a2819cc, type: 3}
   destroyOnDeath: 1
   hideOnDeath: 0

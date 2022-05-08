@@ -13,7 +13,7 @@ public class TroopBehaviour : MonoBehaviour
     [SerializeField] GameObject spawnParticle;
 
     [Header("Movement")]
-    [SerializeField] float moveSpeed;
+    public float moveSpeed;
     Transform target;
 
     [Header("Combat")]
@@ -22,6 +22,7 @@ public class TroopBehaviour : MonoBehaviour
     [SerializeField] float damage;
     [SerializeField] bool targetsPlayer;
     [SerializeField] float playerDetectionRange;
+    [SerializeField] bool dieAfterAttack;
     void Start()
     {
         mode = BehaviourMode.Idle;
@@ -92,17 +93,26 @@ public class TroopBehaviour : MonoBehaviour
 
     IEnumerator Attack()
     {
-        yield return new WaitForSeconds(attackSpeed);
-
         if (Vector3.Distance(transform.position, target.position) <= attackRange)
         {
             target.GetComponent<Health>().TakeDamage(damage);
+            if (WaveManager.instance.thorns)
+            {
+                GetComponent<Health>().TakeDamage(damage / 2);
+            }
+
+            if (dieAfterAttack)
+            {
+                GetComponent<Health>().TakeDamage(Mathf.Infinity);
+            }
         }
         else
         {
             mode = BehaviourMode.Moving;
             yield return null;
         }
+
+        yield return new WaitForSeconds(attackSpeed);
 
         StartCoroutine(Attack());
     }

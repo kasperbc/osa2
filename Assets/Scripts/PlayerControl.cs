@@ -161,6 +161,7 @@ public class PlayerControl : MonoBehaviour
     int GetUpgradeKeys()
     {
         KeyCode[] upgradeKeys = {KeyCode.None, KeyCode.None, KeyCode.None};
+        KeyCode closeKey = KeyCode.None;
 
         switch (controlMethod)
         {
@@ -168,13 +169,13 @@ public class PlayerControl : MonoBehaviour
                 upgradeKeys[0] = KeyCode.Alpha1;
                 upgradeKeys[1] = KeyCode.Alpha2;
                 upgradeKeys[2] = KeyCode.Alpha3;
-                upgradeKeys[2] = KeyCode.X;
+                closeKey = KeyCode.X;
                 break;
             case ControlMethod.PS4:
                 upgradeKeys[0] = GetJoystickButton(KeyCode.JoystickButton0);
                 upgradeKeys[1] = GetJoystickButton(KeyCode.JoystickButton3);
                 upgradeKeys[2] = GetJoystickButton(KeyCode.JoystickButton2);
-                upgradeKeys[2] = GetJoystickButton(KeyCode.JoystickButton1);
+                closeKey = GetJoystickButton(KeyCode.JoystickButton1);
                 break;
         }
 
@@ -184,6 +185,8 @@ public class PlayerControl : MonoBehaviour
             return 2;
         else if (Input.GetKeyDown(upgradeKeys[2]))
             return 3;
+        else if (Input.GetKeyDown(closeKey))
+            return -1;
         else
             return 0;
     }

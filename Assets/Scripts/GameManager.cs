@@ -79,8 +79,12 @@ public class GameManager : MonoBehaviour
 
         if (debugMode && Input.GetKeyDown(KeyCode.P))
         {
-            StopCoroutine(SpawnWave());
-            StartCoroutine(StartWave());
+            GameObject[] troops = GameObject.FindGameObjectsWithTag("Troop");
+
+            foreach (GameObject t in troops)
+            {
+                Destroy(t);
+            }
         }
     }
 
@@ -635,17 +639,25 @@ public class GameManager : MonoBehaviour
         {
             GameObject troopPrefab = WaveManager.instance.GetTroop(troopType);
 
-            MapData map = GameObject.Find("Map").GetComponent<MapData>();
-
             float spawnRot = Random.Range(0, 359);
             float spawnDistance = Random.Range(30, 50);
-
             Quaternion rotation = Quaternion.Euler(0, spawnRot, 0);
 
             GameObject troop = Instantiate(troopPrefab, new Vector3(0, -3, 0), rotation);
 
+            TroopBehaviour troopBehaviour = troop.GetComponent<TroopBehaviour>();
+            Health troopHealth = troop.GetComponent<Health>();
+
+            troopBehaviour.moveSpeed *= WaveManager.instance.enemySpeedModifier;
+            troopHealth.MultiplyMaxHealth(0.05f * GetWave() + 1);
+
             troop.transform.Translate(troop.transform.forward * spawnDistance);
         }
+    }
+
+    int GetWave()
+    {
+        return wave;
     }
 
     void EnableFog()

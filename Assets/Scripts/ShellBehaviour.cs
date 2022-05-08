@@ -9,6 +9,9 @@ public class ShellBehaviour : MonoBehaviour
     public float followSpeed;
 
     Transform ball;
+
+    public float damage;
+    public float pierces;
     void Start()
     {
         GameObject b = GameObject.Find("Ball");
@@ -48,7 +51,7 @@ public class ShellBehaviour : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "Bounds")
+        if (other.gameObject.name == "Bounds" || other.gameObject.CompareTag("Shell"))
         {
             return;
         }
@@ -71,11 +74,18 @@ public class ShellBehaviour : MonoBehaviour
         {
             Health hp = other.gameObject.GetComponent<Health>();
 
-            hp.TakeDamage(20);
+            hp.TakeDamage(damage);
         }
 
         SoundManager.instance.PlaySound("explosion", 0.15f, Random.Range(0.65f, 0.75f), false, false);
 
-        Destroy(gameObject);
+        if (pierces == 0)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            pierces--;
+        }
     }
 }
