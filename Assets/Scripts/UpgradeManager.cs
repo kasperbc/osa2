@@ -64,6 +64,11 @@ public class UpgradeManager : MonoBehaviour
                 return;
         }
 
+        PlayerShoot shootComponent = GetComponent<PlayerShoot>();
+
+        upgradePanel.transform.parent.GetChild(4).GetComponent<TextMeshProUGUI>().text =
+            "Damage: " + shootComponent.damage * shootComponent.damageMultiplier;
+
         CloseUpgradeMenu();
     }
 
@@ -175,7 +180,8 @@ public class UpgradeManager : MonoBehaviour
 
         RandomizeUpgradeShop();
 
-        if (GameManager.instance.GetPlayerCount() == 1)
+        PlayerShoot _shoot = GetComponent<PlayerShoot>();
+        if (_shoot.cam.rect.width == _shoot.cam.rect.height)
         {
             upgradePanel.GetComponent<RectTransform>().localScale = new Vector3(1.5f, 1.5f, 1);
         }
@@ -191,11 +197,30 @@ public class UpgradeManager : MonoBehaviour
         upgradeIcons[1].sprite = statUpgradeIcons[(int)upgrade2];
         upgradeIcons[2].sprite = diamondUpgradeIcons[(int)upgrade3];
 
-        upgradeIcons[0].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = upgrade1.ToString();
-        upgradeIcons[1].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = upgrade2.ToString();
-        upgradeIcons[2].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = upgrade3.ToString();
+        upgradeIcons[0].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = FormatName(upgrade1.ToString());
+        upgradeIcons[2].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = FormatName(upgrade3.ToString());
+        upgradeIcons[1].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = FormatName(upgrade2.ToString());
 
         print(upgrade1);
+    }
+
+    string FormatName(string name)
+    {
+        char[] nameCharArray = name.ToCharArray();
+
+        string newName = string.Empty;
+
+        for (int i = 0; i < nameCharArray.Length; i++)
+        {
+            if (char.IsUpper(nameCharArray[i]))
+            {
+                newName += " ";
+            }
+
+            newName += nameCharArray[i];
+        }
+
+        return newName;
     }
 
     void CloseUpgradeMenu()
