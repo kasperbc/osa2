@@ -15,7 +15,19 @@ public class PlayerShoot : MonoBehaviour
     public GameObject crossHair;
 
     public int damage;
+    public float damageMultiplier = 1;
+
     public float reloadTime;    // The time it takes for the player to reload
+    public float reloadMultiplier = 1;
+
+    public float bulletSpeed;
+    public float bulletSpeedMultiplier = 1;
+
+    public int pierceCount;
+
+    public int bulletCount;
+
+    public float bulletSize;
 
     public int[] levels;
 
@@ -26,7 +38,11 @@ public class PlayerShoot : MonoBehaviour
         barrel = gunModel.transform.GetChild(0).gameObject;
 
         reloadTime = 0.75f;
+        bulletSpeed = 20;
         damage = 20;
+        pierceCount = 0;
+        bulletCount = 1;
+        bulletSize = 1;
     }
 
     public void Aim(Vector3 direction)
@@ -49,16 +65,31 @@ public class PlayerShoot : MonoBehaviour
 
         // Activate cooldown
         onCooldown = true;
-        Invoke(nameof(DeactivateCooldown), reloadTime);
+        Invoke(nameof(DeactivateCooldown), reloadTime * reloadMultiplier);
 
-        // Fire the shell
-        Vector3 spawnPos = gunModel.transform.position + gunModel.transform.forward * 2;
+        for (int i = 0; i < bulletCount; i++)
+        {
+            // Fire the shell
+            Vector3 spawnPos = gunModel.transform.position + gunModel.transform.forward * 2;
         
-        Vector3 spawnRot = gunModel.transform.eulerAngles;
-        spawnRot.x -= 15;
+            Vector3 spawnRot = gunModel.transform.eulerAngles;
+            spawnRot.x -= 15 + ((bulletSize - 1) * 15);
 
-        GameObject spawnedShell = Instantiate(shell, spawnPos, Quaternion.Euler(spawnRot));
-        spawnedShell.GetComponent<Rigidbody>().AddForce((spawnPos - gunModel.transform.position) * 20, ForceMode.Impulse);
+            if (i % 2 == 0)
+            {
+                spawnRot.y -= 30 * i;
+            }
+            else
+            {
+                spawnRot.y += 30 * i;
+            }
+
+            GameObject spawnedShell = Instantiate(shell, spawnPos, Quaternion.Euler(spawnRot));
+            spawnedShell.GetComponent<Rigidbody>().AddForce((spawnPos - gunModel.transform.position) * (bulletSpeed * bulletSpeedMultiplier), ForceMode.Impulse);
+            spawnedShell.GetComponent<ShellBehaviour>().damage = damage * damageMultiplier;
+            spawnedShell.GetComponent<ShellBehaviour>().pierces = pierceCount;
+            spawnedShell.transform.localScale *= bulletSize;
+        }
 
         // Play animation
         barrel.GetComponent<Animator>().SetTrigger("Fire");
@@ -66,11 +97,9 @@ public class PlayerShoot : MonoBehaviour
 
         // Play reload animation
         reloadBar.GetComponent<Animator>().SetTrigger("Reload");
-        reloadBar.GetComponent<Animator>().SetFloat("ReloadSpeed", 1 / reloadTime);
+        reloadBar.GetComponent<Animator>().SetFloat("ReloadSpeed", 1 / (reloadTime * reloadMultiplier));
 
-        int level = GameManager.instance.GetLevels()[1];
-
-        float pitch = 1 - (level / 10);
+        float pitch = 1;
         pitch = Mathf.Clamp(pitch, 0.5f, 1f);
         
 

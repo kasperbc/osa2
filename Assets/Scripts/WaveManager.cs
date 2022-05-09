@@ -13,6 +13,10 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> troops = new List<GameObject>();
     public bool waveInProgression;
+    public bool upgradeInProgression;
+
+    public float enemySpeedModifier;
+    public bool thorns;
     void Start()
     {
         if (instance == null)
@@ -23,6 +27,8 @@ public class WaveManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        enemySpeedModifier = 1;
     }
 
     void Update()
@@ -31,6 +37,27 @@ public class WaveManager : MonoBehaviour
         {
             GetWaveCompletion();
         }
+        if (upgradeInProgression)
+        {
+            CheckIfUpgradesSelected();
+        }
+    }
+
+    void CheckIfUpgradesSelected()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject p in players)
+        {
+            if (p.GetComponent<UpgradeManager>().upgradePanelOpen)
+            {
+                return;
+            }
+        }
+
+        upgradeInProgression = false;
+
+        StartCoroutine(GameManager.instance.StartWave());
     }
 
     public int GetWaveCount()
@@ -86,9 +113,20 @@ public class WaveManager : MonoBehaviour
         {
             waveInProgression = false;
 
-            GameObject.Find("Diamond").GetComponent<Health>().Heal(333);
+            GameObject.Find("Diamond").GetComponent<Health>().Heal(300);
 
-            GameManager.instance.SetUpgrades(true);
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+            foreach (GameObject p in players)
+            {
+                p.GetComponent<Health>().FullHeal();
+                p.GetComponent<UpgradeManager>().OpenUpgradeMenu();
+            }
+
+            enemySpeedModifier = 1;
+            thorns = false;
+
+            upgradeInProgression = true;
         }
     }
 }

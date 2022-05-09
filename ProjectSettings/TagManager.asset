@@ -8,6 +8,7 @@ TagManager:
   - PlayerCamera
   - PlayerVirtualCamera
   - Troop
+  - Shell
   layers:
   - Default
   - TransparentFX

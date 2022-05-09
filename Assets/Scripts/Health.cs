@@ -80,6 +80,11 @@ public class Health : MonoBehaviour
         UpdateHealthUI();
     }
 
+    public void MultiplyMaxHealth(float value)
+    {
+        maxHealth *= value;
+    }
+
     void UpdateHealthUI()
     {
         if (healthBar != null)

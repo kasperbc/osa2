@@ -5295,6 +5295,7 @@ GameObject:
   - component: {fileID: 5761853702580526525}
   - component: {fileID: 396368562119146648}
   - component: {fileID: 2438419021149030486}
+  - component: {fileID: 3694221769673766721}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5347,7 +5348,6 @@ MonoBehaviour:
   moveSpeed: 8
   turnSpeed: 150
   playerModel: {fileID: 5761853702551681182}
-  p2: 0
 --- !u!54 &5761853702580526524
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5379,9 +5379,11 @@ MonoBehaviour:
   gunModel: {fileID: 5761853702039345024}
   shell: {fileID: 6135859427323811926, guid: 840aefd841a2be94ab8c3f26ea573a3a, type: 3}
   cam: {fileID: 0}
-  p2: 0
   reloadBar: {fileID: 0}
   crossHair: {fileID: 0}
+  damage: 0
+  reloadTime: 0
+  levels: 
 --- !u!114 &396368562119146648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5411,7 +5413,35 @@ MonoBehaviour:
   maxHealth: 100
   health: 0
   healthBar: {fileID: 0}
+  healthText: {fileID: 0}
   dyingParticle: {fileID: 0}
   destroyOnDeath: 1
   hideOnDeath: 0
   dead: 0
+--- !u!114 &3694221769673766721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761853702580526527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b9bc1cabb23d04e800c60be4436700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradePanel: {fileID: 0}
+  weaponUpgradeIcons:
+  - {fileID: 21300000, guid: 463ba971ad47f034f9c0a9ea368b6a8b, type: 3}
+  - {fileID: 21300000, guid: 40abd8d871590304fa4cd60deb750dd5, type: 3}
+  - {fileID: 21300000, guid: 04d50499cad7f4b4286b9584f4d4c315, type: 3}
+  - {fileID: 21300000, guid: a16294845a5ca7447a3b1559608163f2, type: 3}
+  - {fileID: 21300000, guid: 7487a6d9a32d52745828d48f8c6e7314, type: 3}
+  statUpgradeIcons:
+  - {fileID: 21300000, guid: a95447df1b1edc443920489f7bef6c11, type: 3}
+  - {fileID: 21300000, guid: 37590817f7c276740b890d2bdf05d17d, type: 3}
+  - {fileID: 21300000, guid: d846933712bbd384e83a90efd0afd929, type: 3}
+  diamondUpgradeIcons:
+  - {fileID: 21300000, guid: 11d403a5f8c1ce646bfc758e66424ee3, type: 3}
+  - {fileID: 21300000, guid: 67958313e3a45784fbdb07148250a30c, type: 3}
+  - {fileID: 21300000, guid: eb3733a057394264c814fd39b7167399, type: 3}

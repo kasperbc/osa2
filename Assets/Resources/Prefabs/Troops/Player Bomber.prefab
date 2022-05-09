@@ -102,10 +102,11 @@ MonoBehaviour:
   spawnParticle: {fileID: 3390588438428353440, guid: 7af1bdc6adab57a479ec69d217357575, type: 3}
   moveSpeed: 10
   attackRange: 3
-  attackSpeed: 300
+  attackSpeed: 0
   damage: 10
   targetsPlayer: 1
   playerDetectionRange: 15
+  dieAfterAttack: 1
 --- !u!95 &1814654847566164369
 Animator:
   serializedVersion: 3
@@ -150,9 +151,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a35fc6c2d34c894fad5bc759943aba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 15
   health: 0
   healthBar: {fileID: 0}
+  healthText: {fileID: 0}
   dyingParticle: {fileID: 1354638898917926343, guid: 68528c32dabfa3c4aa6c40534a2819cc, type: 3}
   destroyOnDeath: 1
   hideOnDeath: 0
