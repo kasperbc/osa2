@@ -155,7 +155,8 @@ MonoBehaviour:
   health: 0
   healthBar: {fileID: 0}
   healthText: {fileID: 0}
-  dyingParticle: {fileID: 1354638898917926343, guid: 68528c32dabfa3c4aa6c40534a2819cc, type: 3}
+  dyingParticle: {fileID: 2803802482359244845, guid: 7d33f886747eb3a44b4f33f201e73f64, type: 3}
   destroyOnDeath: 1
   hideOnDeath: 0
   dead: 0
+  damageScore: 10

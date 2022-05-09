@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
 
     private bool debugMode;
 
+    private GameObject gameOverPanel;
+    private int score;
     void Start()
     {
         if (instance == null)
@@ -65,6 +67,9 @@ public class GameManager : MonoBehaviour
         {
             debugMode = true;
         }
+
+        gameOverPanel = GameObject.Find("GameOver");
+        gameOverPanel.SetActive(false);
     }
 
     void Update()
@@ -158,7 +163,7 @@ public class GameManager : MonoBehaviour
         GameObject.Find("Status").GetComponent<Text>().text = string.Empty;
     }
 
-    private void ReloadScene()
+    public void ReloadScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -691,5 +696,31 @@ public class GameManager : MonoBehaviour
     public int GetPlayerCount()
     {
         return playerCount;
+    }
+
+    public void GameOver()
+    {
+        gameOverPanel.SetActive(true);
+
+        GameObject[] troops = GameObject.FindGameObjectsWithTag("Troop");
+
+        foreach (GameObject t in troops)
+        {
+            Destroy(t);
+        }
+
+        gameOverPanel.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = "Score: " + score;
+
+        ToggleMouseLock();
+
+        Destroy(WaveManager.instance);
+    }
+
+    public void AddScore(int value)
+    {
+        score += value;
+
+        if (score < 0)
+            score = 0;
     }
 }

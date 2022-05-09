@@ -49,6 +49,7 @@ MonoBehaviour:
   - r4-1-a1-1-r4-1-a1-1-r4-1-a1-1-r4-1-a1-1-r4
   - f3-2-f3-2-f3-2-f3-2-f3
   - b1
+  - s1-1-s1-1-s1-1-s1-1-s1-1
   - r5-s1-3-r5-s1-3-r5-s1-3-r5-s1-3-r5-s1
   - r5-p1-3-r5-p1-3-r5-p1-3-r5-p1-3-r5-p1
   - p2-1-p2-1-p2-1-p2-1-p2-1-p2-1-p2-1-p2-1-p2
@@ -62,3 +63,6 @@ MonoBehaviour:
   - {fileID: 1814654847566164380, guid: b56928a1a2df1e242b761ed7e6daacb7, type: 3}
   - {fileID: 2369557091848724533, guid: 2e9de68d9df503345b81d639b44d6d6f, type: 3}
   waveInProgression: 0
+  upgradeInProgression: 0
+  enemySpeedModifier: 0
+  thorns: 0

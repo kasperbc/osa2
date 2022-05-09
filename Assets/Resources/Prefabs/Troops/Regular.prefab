@@ -159,3 +159,4 @@ MonoBehaviour:
   destroyOnDeath: 1
   hideOnDeath: 0
   dead: 0
+  damageScore: 10

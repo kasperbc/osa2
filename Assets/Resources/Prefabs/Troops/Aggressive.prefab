@@ -106,6 +106,7 @@ MonoBehaviour:
   damage: 5
   targetsPlayer: 1
   playerDetectionRange: 15
+  dieAfterAttack: 0
 --- !u!95 &8296476406470836921
 Animator:
   serializedVersion: 3
@@ -158,3 +159,4 @@ MonoBehaviour:
   destroyOnDeath: 1
   hideOnDeath: 0
   dead: 0
+  damageScore: 10

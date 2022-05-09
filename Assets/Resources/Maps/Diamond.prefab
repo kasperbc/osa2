@@ -1383,10 +1383,12 @@ MonoBehaviour:
   maxHealth: 1000
   health: 0
   healthBar: {fileID: 0}
+  healthText: {fileID: 0}
   dyingParticle: {fileID: 397127418071871602, guid: a687a237919facf4eb7e2d85bfde2981, type: 3}
   destroyOnDeath: 0
   hideOnDeath: 1
   dead: 0
+  damageScore: -1
 --- !u!1 &7994161204732184711
 GameObject:
   m_ObjectHideFlags: 0

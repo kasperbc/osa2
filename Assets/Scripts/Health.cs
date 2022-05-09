@@ -14,6 +14,7 @@ public class Health : MonoBehaviour
     [SerializeField] bool destroyOnDeath;
     [SerializeField] bool hideOnDeath;
     public bool dead;
+    public int damageScore;
     void Start()
     {
         health = maxHealth;
@@ -35,6 +36,8 @@ public class Health : MonoBehaviour
             health = 0;
             Die();
         }
+
+        GameManager.instance.AddScore(damageScore);
     }
 
     void Die()

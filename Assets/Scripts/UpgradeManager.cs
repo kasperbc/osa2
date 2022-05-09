@@ -148,8 +148,8 @@ public class UpgradeManager : MonoBehaviour
     void RandomizeUpgradeShop()
     {
         upgrade1 = (WeaponUpgrade)Random.Range(1, 6);
-        upgrade2 = (StatUpgrade)Random.Range(0, 2);
-        upgrade3 = (DiamondUpgrade)Random.Range(0, 2);
+        upgrade2 = (StatUpgrade)Random.Range(0, 3);
+        upgrade3 = (DiamondUpgrade)Random.Range(0, 3);
     }
 
     void UpdateButtonPrompts()

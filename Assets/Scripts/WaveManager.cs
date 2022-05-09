@@ -41,6 +41,8 @@ public class WaveManager : MonoBehaviour
         {
             CheckIfUpgradesSelected();
         }
+
+        GetLose();
     }
 
     void CheckIfUpgradesSelected()
@@ -127,6 +129,18 @@ public class WaveManager : MonoBehaviour
             thorns = false;
 
             upgradeInProgression = true;
+        }
+    }
+
+    private void GetLose()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        GameObject diamond = GameObject.Find("Diamond");
+
+        if (players.Length == 0 || diamond.GetComponent<Health>().dead == true)
+        {
+            GameManager.instance.GameOver();
         }
     }
 }
