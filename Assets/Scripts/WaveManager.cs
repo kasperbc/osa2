@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class WaveManager : MonoBehaviour
 {
@@ -43,6 +44,8 @@ public class WaveManager : MonoBehaviour
         }
 
         GetLose();
+
+        GameObject.Find("Troops").GetComponent<TextMeshProUGUI>().text = "Troops left: " + GetTroopsAlive();
     }
 
     void CheckIfUpgradesSelected()
@@ -107,11 +110,16 @@ public class WaveManager : MonoBehaviour
         return null;
     }
 
+    private int GetTroopsAlive()
+    {
+        return GameObject.FindGameObjectsWithTag("Troop").Length;
+    }
+
     private void GetWaveCompletion()
     {
-        GameObject[] troops = GameObject.FindGameObjectsWithTag("Troop");
+        int troops = GetTroopsAlive();
 
-        if (troops.Length == 0)
+        if (troops == 0)
         {
             waveInProgression = false;
 

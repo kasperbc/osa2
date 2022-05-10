@@ -5,7 +5,6 @@ using UnityEngine;
 public class MapData : MonoBehaviour
 {
     public Vector3[] spawnpoints = new Vector3[4];
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

@@ -13,6 +13,7 @@ public class Health : MonoBehaviour
     [SerializeField] GameObject dyingParticle;
     [SerializeField] bool destroyOnDeath;
     [SerializeField] bool hideOnDeath;
+    [SerializeField] string animationTrigger;
     public bool dead;
     public int damageScore;
     void Start()
@@ -91,7 +92,15 @@ public class Health : MonoBehaviour
     void UpdateHealthUI()
     {
         if (healthBar != null)
+        {
             healthBar.GetComponent<Image>().fillAmount = health / maxHealth;
+
+
+            if (!animationTrigger.Equals(""))
+            {
+                healthBar.GetComponent<Animator>().SetTrigger(animationTrigger);
+            }
+        }
 
         if (healthText != null)
             healthText.text = health + "/" + maxHealth;

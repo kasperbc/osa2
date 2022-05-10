@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
         lobbyUI.Add(GameObject.Find("EnterStart"));
 
         invasionUI.Add(GameObject.Find("DiamondHealthBar"));
+        invasionUI.Add(GameObject.Find("Troops"));
 
         SetInvasionUI(false);
 
@@ -622,6 +623,13 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
+    }
+    
+    void SpawnTrees()
+    {
+        GameObject treePrefab = Resources.Load<GameObject>("Prefabs/Tree");
+
+        Instantiate(treePrefab);
     }
 
     void SpawnTroop(WaveManager.Troop troopType, string wave)
