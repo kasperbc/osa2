@@ -15,13 +15,13 @@ public class PlayerShoot : MonoBehaviour
     public GameObject crossHair;
 
     public int damage;
-    public float damageMultiplier = 1;
+    [HideInInspector] public float damageMultiplier = 1;
 
     public float reloadTime;    // The time it takes for the player to reload
-    public float reloadMultiplier = 1;
+    [HideInInspector] public float reloadMultiplier = 1;
 
     public float bulletSpeed;
-    public float bulletSpeedMultiplier = 1;
+    [HideInInspector] public float bulletSpeedMultiplier = 1;
 
     public int pierceCount;
 

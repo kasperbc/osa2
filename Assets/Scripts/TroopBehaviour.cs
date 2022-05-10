@@ -61,6 +61,16 @@ public class TroopBehaviour : MonoBehaviour
 
         Vector3 lookRotEuler = lookRot.eulerAngles;
         lookRotEuler.x = 0;
+
+        Physics.Raycast(transform.position, direction, out RaycastHit hit);
+
+        Debug.DrawRay(transform.position, direction);
+
+        if (hit.collider.CompareTag("Tree"))
+        {
+            lookRotEuler.y += 90;
+        }
+
         lookRot = Quaternion.Euler(lookRotEuler);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, 1 * Time.deltaTime);
@@ -104,6 +114,11 @@ public class TroopBehaviour : MonoBehaviour
 
     IEnumerator Attack()
     {
+        if (target == null)
+        {
+            mode = BehaviourMode.Moving;
+            yield return null;
+        }
 
         if (Vector3.Distance(transform.position, target.position) <= attackRange)
         {

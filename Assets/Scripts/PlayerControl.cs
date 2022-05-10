@@ -8,6 +8,7 @@ public class PlayerControl : MonoBehaviour
     public enum ControlMethod { MouseAndKeyboard, MouseOnly, KeyboardOnly, PS4 };
     public ControlMethod controlMethod;
     public int controllerPort;
+    public int playerID;
 
     private enum JoystickAxis { LeftStickHorizontal, LeftStickVertical, RightStickHorizontal, RightStickVertical };
 

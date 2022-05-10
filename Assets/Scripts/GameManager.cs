@@ -91,6 +91,8 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(t);
             }
+
+            StopCoroutine(SpawnWave());
         }
     }
 
@@ -320,6 +322,8 @@ public class GameManager : MonoBehaviour
             control.controllerPort = controllerPort;
         }
 
+        control.playerID = playerNo;
+
         // Set player color
         string color = "Green";
         switch (playerNo)
@@ -383,8 +387,6 @@ public class GameManager : MonoBehaviour
         Destroy(hBar);
 
         print("Removed Player " + number);
-
-        StartCoroutine(DisplayStatus("Player " + (playerCount + 1) + " has left!"));
 
         // Re-order other players
         for (int i = number + 1; i <= 4; i++)
@@ -647,6 +649,7 @@ public class GameManager : MonoBehaviour
 
             float spawnRot = Random.Range(0, 359);
             float spawnDistance = Random.Range(30, 50);
+
             Quaternion rotation = Quaternion.Euler(0, spawnRot, 0);
 
             GameObject troop = Instantiate(troopPrefab, new Vector3(0, -3, 0), rotation);

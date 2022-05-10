@@ -61,6 +61,15 @@ public class Health : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+
+        if (gameObject.CompareTag("Player"))
+        {
+            int pID = GetComponent<PlayerControl>().playerID;
+
+            GameManager.instance.RemovePlayer(pID);
+            StartCoroutine(GameManager.instance.DisplayStatus("Player 2 has died!"));
+        }
     }
 
     public void AddMaxHealth(float value)
@@ -102,7 +111,10 @@ public class Health : MonoBehaviour
             }
         }
 
+        float healthString = health;
+        healthString = Mathf.Clamp(healthString, 0, Mathf.Infinity);
+
         if (healthText != null)
-            healthText.text = health.ToString();
+            healthText.text = healthString.ToString();
     }
 }
