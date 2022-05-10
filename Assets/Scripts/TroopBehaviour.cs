@@ -26,6 +26,8 @@ public class TroopBehaviour : MonoBehaviour
     [SerializeField] bool dieAfterAttack;
     
     private Animator skeletonAnim;
+
+    bool footstepActive;
     void Start()
     {
         skeletonAnim = transform.GetChild(0).GetComponent<Animator>();
@@ -35,6 +37,8 @@ public class TroopBehaviour : MonoBehaviour
         StartCoroutine(Emerge());
 
         diamond = GameObject.Find("Diamond");
+
+        GetComponent<Health>().deathPitch += Random.Range(-0.2f, 0.2f);
     }
 
     void Update()
@@ -62,6 +66,11 @@ public class TroopBehaviour : MonoBehaviour
         Vector3 lookRotEuler = lookRot.eulerAngles;
         lookRotEuler.x = 0;
 
+        if (!footstepActive)
+        {
+            StartCoroutine(Footstep());
+        }
+
         Physics.Raycast(transform.position, direction, out RaycastHit hit);
 
         Debug.DrawRay(transform.position, direction);
@@ -81,6 +90,22 @@ public class TroopBehaviour : MonoBehaviour
         {
             mode = BehaviourMode.Attacking;
             StartCoroutine(Attack());
+        }
+    }
+
+    IEnumerator Footstep()
+    {
+        footstepActive = true;
+
+        yield return new WaitForSeconds(moveAnimMultiplier / 2);
+
+        float volume = (1 - (GetNearestPlayerDistance() - 20)) / 30;
+
+        SoundManager.instance.PlaySound("kick", volume, 1, false, false);
+
+        if (footstepActive)
+        {
+            StartCoroutine(Footstep());
         }
     }
 
@@ -108,12 +133,17 @@ public class TroopBehaviour : MonoBehaviour
                 return;
             }
         }
+
+        
         
         target = diamond.transform;
     }
 
     IEnumerator Attack()
     {
+        footstepActive = false;
+        StopCoroutine(Footstep());
+
         if (target == null)
         {
             mode = BehaviourMode.Moving;
@@ -124,6 +154,10 @@ public class TroopBehaviour : MonoBehaviour
         {
             skeletonAnim.SetTrigger("Attack1h1");
             skeletonAnim.SetFloat("attackSpeed", 1 / attackSpeed);
+
+            float volume = (1 - (GetNearestPlayerDistance() - 15)) / 30;
+
+            SoundManager.instance.PlaySound("clang", volume, Random.Range(1, 1.2f) * (1 / attackSpeed), false, false);
 
             target.GetComponent<Health>().TakeDamage(damage);
 
@@ -164,5 +198,24 @@ public class TroopBehaviour : MonoBehaviour
         gameObject.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
 
         mode = BehaviourMode.Moving;
+    }
+
+    float GetNearestPlayerDistance()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+
+        float closestDistance = Mathf.Infinity;
+        foreach (GameObject p in players)
+        {
+            float distanceToPlayer = Vector3.Distance(p.transform.position, transform.position);
+
+            if (distanceToPlayer < closestDistance)
+            {
+                closestDistance = distanceToPlayer;
+            }
+        }
+
+        return closestDistance;
     }
 }

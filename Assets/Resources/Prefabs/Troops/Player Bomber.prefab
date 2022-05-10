@@ -468,6 +468,13 @@ MonoBehaviour:
   animationTrigger: 
   dead: 0
   damageScore: 10
+  stunnable: 1
+  deathSound: scream
+  deathPitch: 3
+  spawnSound: 
+  spawnPitch: 0
+  damageSound: screamshort
+  damagePitch: 3
 --- !u!1 &1861075375883967859
 GameObject:
   m_ObjectHideFlags: 0

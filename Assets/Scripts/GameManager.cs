@@ -591,6 +591,17 @@ public class GameManager : MonoBehaviour
     {
         string[] waveData = WaveManager.instance.ReadWave(wave - 1);
 
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject player in players)
+        {
+            GameObject vCam = player.GetComponent<PlayerShoot>().cam.GetComponent<CinemachineBrain>().ActiveVirtualCamera.VirtualCameraGameObject;
+
+            vCam.GetComponent<Animator>().SetTrigger("Shake");
+        }
+
+        SoundManager.instance.PlaySound("rumble");
+
         foreach (string wave in waveData)
         {
             if (int.TryParse(wave, out int seconds))

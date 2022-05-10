@@ -43,7 +43,7 @@ public class SoundManager : MonoBehaviour
         {
             if (s.clip.name == "whitenoise")
             {
-                s.volume = 0.25f * globalVolume;
+                //s.volume = 0.25f * globalVolume;
             }
         }
     }

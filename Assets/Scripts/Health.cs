@@ -16,9 +16,25 @@ public class Health : MonoBehaviour
     [SerializeField] string animationTrigger;
     public bool dead;
     public int damageScore;
+    public bool stunnable;
+    public string deathSound;
+    [Range(0.1f, 4f)]
+    public float deathPitch;
+    public string spawnSound;
+    [Range(0.1f, 4f)]
+    public float spawnPitch;
+    public string damageSound;
+    [Range(0.1f, 4f)]
+    public float damagePitch;
+
     void Start()
     {
         health = maxHealth;
+
+        if (spawnSound != string.Empty)
+        {
+            SoundManager.instance.PlaySound(spawnSound, 1, spawnPitch, false, false);
+        }
     }
 
     public void TakeDamage(float amount)
@@ -38,7 +54,25 @@ public class Health : MonoBehaviour
             Die();
         }
 
+        SoundManager.instance.PlaySound(damageSound, 1, damagePitch, false, false);
+
+        if (gameObject.CompareTag("Troop") && stunnable)
+        {
+            StartCoroutine(StunTroop());
+        }
+
         GameManager.instance.AddScore(damageScore);
+    }
+
+    IEnumerator StunTroop()
+    {
+        transform.GetChild(0).GetComponent<Animator>().SetTrigger("Hit1");
+
+        GetComponent<TroopBehaviour>().enabled = false;
+
+        yield return new WaitForSeconds(0.5f);
+
+        GetComponent<TroopBehaviour>().enabled = true;
     }
 
     void Die()
@@ -47,6 +81,11 @@ public class Health : MonoBehaviour
 
         dead = true;
         
+        if (deathSound != string.Empty)
+        {
+            SoundManager.instance.PlaySound(deathSound, 1, deathPitch, false, false);
+        }
+
         if (dyingParticle != null)
         {
             Instantiate(dyingParticle, transform.position, transform.rotation);
@@ -63,12 +102,12 @@ public class Health : MonoBehaviour
         }
 
 
-        if (gameObject.CompareTag("Player"))
+        if (gameObject.CompareTag("Player") && GameManager.instance.playerCount > 1)
         {
             int pID = GetComponent<PlayerControl>().playerID;
 
             GameManager.instance.RemovePlayer(pID);
-            StartCoroutine(GameManager.instance.DisplayStatus("Player 2 has died!"));
+            StartCoroutine(GameManager.instance.DisplayStatus("Player" + (pID + 1) + "has died!"));
         }
     }
 

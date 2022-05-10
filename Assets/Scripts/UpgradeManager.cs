@@ -180,6 +180,8 @@ public class UpgradeManager : MonoBehaviour
 
         RandomizeUpgradeShop();
 
+        SoundManager.instance.PlaySound("goal", 0.5f, 1, false, false);
+
         PlayerShoot _shoot = GetComponent<PlayerShoot>();
         if (_shoot.cam.rect.width == _shoot.cam.rect.height)
         {

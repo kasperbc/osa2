@@ -1824,3 +1824,10 @@ MonoBehaviour:
   animationTrigger: 
   dead: 0
   damageScore: 10
+  stunnable: 1
+  deathSound: scream
+  deathPitch: 3.5
+  spawnSound: 
+  spawnPitch: 0
+  damageSound: screamshort
+  damagePitch: 3.5
