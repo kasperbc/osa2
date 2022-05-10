@@ -4,24 +4,26 @@ using UnityEngine;
 
 public class TreeSpawner : MonoBehaviour
 {
-    [SerializeField] int treeCount;
+    [SerializeField] GameObject[] prefabs;
+    [SerializeField] int count;
     [SerializeField] float mapSize;
     [SerializeField] int randomPosMaxAttempts;
-    [SerializeField] float treeMinDistance;
+    [SerializeField] float minDistance;
+    [SerializeField] float randomSize;
     void Start()
     {
-        GameObject treePrefab = Resources.Load<GameObject>("Prefabs/Tree");
-
-        for (int i = 0; i < treeCount; i++)
+        for (int i = 0; i < count; i++)
         {
             Vector3 spawnPos = GetRandomPos();
             Vector3 spawnRot = Vector3.zero;
 
             spawnRot.y = Random.Range(0, 359f);
 
-            GameObject spawnedTree = Instantiate(treePrefab, spawnPos, Quaternion.Euler(spawnRot));
+            int prefabIndex = Random.Range(0, prefabs.Length - 1);
 
-            spawnedTree.transform.localScale *= Random.Range(0.6f, 1.4f);
+            GameObject spawnedTree = Instantiate(prefabs[prefabIndex], spawnPos, Quaternion.Euler(spawnRot));
+
+            spawnedTree.transform.localScale *= Random.Range(1 - randomSize, 1 + randomSize);
         }
     }
 
@@ -39,7 +41,7 @@ public class TreeSpawner : MonoBehaviour
                 continue;
             }
 
-            Collider[] colliders = Physics.OverlapSphere(transform.position, treeMinDistance);
+            Collider[] colliders = Physics.OverlapSphere(transform.position, minDistance);
             foreach (Collider c in colliders)
             {
                 if (c.CompareTag("Tree"))
