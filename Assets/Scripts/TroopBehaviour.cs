@@ -15,6 +15,7 @@ public class TroopBehaviour : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed;
     Transform target;
+    [SerializeField] float moveAnimMultiplier = 1;
 
     [Header("Combat")]
     [SerializeField] float attackRange;
@@ -23,8 +24,12 @@ public class TroopBehaviour : MonoBehaviour
     [SerializeField] bool targetsPlayer;
     [SerializeField] float playerDetectionRange;
     [SerializeField] bool dieAfterAttack;
+    
+    private Animator skeletonAnim;
     void Start()
     {
+        skeletonAnim = transform.GetChild(0).GetComponent<Animator>();
+
         mode = BehaviourMode.Idle;
 
         StartCoroutine(Emerge());
@@ -37,9 +42,12 @@ public class TroopBehaviour : MonoBehaviour
         if (mode == BehaviourMode.Moving)
         {
             SetTarget();
-
             MoveTowardsTarget();
+
+            transform.GetChild(0).transform.position = transform.position;
+            transform.GetChild(0).transform.rotation = transform.rotation;
         }
+
     }
 
     void MoveTowardsTarget()
@@ -47,6 +55,9 @@ public class TroopBehaviour : MonoBehaviour
         Vector3 direction = target.position - transform.position;
 
         Quaternion lookRot = Quaternion.LookRotation(direction);
+
+        skeletonAnim.SetFloat("speedh", moveSpeed);
+        skeletonAnim.SetFloat("moveSpeed", moveAnimMultiplier);
 
         Vector3 lookRotEuler = lookRot.eulerAngles;
         lookRotEuler.x = 0;
@@ -93,9 +104,14 @@ public class TroopBehaviour : MonoBehaviour
 
     IEnumerator Attack()
     {
+
         if (Vector3.Distance(transform.position, target.position) <= attackRange)
         {
+            skeletonAnim.SetTrigger("Attack1h1");
+            skeletonAnim.SetFloat("attackSpeed", 1 / attackSpeed);
+
             target.GetComponent<Health>().TakeDamage(damage);
+
             if (WaveManager.instance.thorns)
             {
                 GetComponent<Health>().TakeDamage(damage / 2);

@@ -103,6 +103,6 @@ public class Health : MonoBehaviour
         }
 
         if (healthText != null)
-            healthText.text = health + "/" + maxHealth;
+            healthText.text = health.ToString();
     }
 }

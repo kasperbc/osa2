@@ -624,13 +624,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
-    void SpawnTrees()
-    {
-        GameObject treePrefab = Resources.Load<GameObject>("Prefabs/Tree");
-
-        Instantiate(treePrefab);
-    }
 
     void SpawnTroop(WaveManager.Troop troopType, string wave)
     {

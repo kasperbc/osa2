@@ -45,7 +45,7 @@ public class WaveManager : MonoBehaviour
 
         GetLose();
 
-        GameObject.Find("Troops").GetComponent<TextMeshProUGUI>().text = "Troops left: " + GetTroopsAlive();
+        GameObject.Find("Troops").GetComponent<TextMeshProUGUI>().text = GetTroopsAlive().ToString();
     }
 
     void CheckIfUpgradesSelected()
