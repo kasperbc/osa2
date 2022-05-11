@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
         joinable = true;
 
         SoundManager.instance.PlaySound("whitenoise", 0.2f, 1, true, false);
+        SoundManager.instance.StopSound("wavemusic");
 
         lobbyUI.Add(GameObject.Find("Volume"));
         lobbyUI.Add(GameObject.Find("TabIndicator"));
@@ -544,7 +545,8 @@ public class GameManager : MonoBehaviour
 
         Instantiate(Resources.Load<GameObject>("Prefabs/WaveManager"));
 
-        SoundManager.instance.PlaySound("wavemusic", 0.4f, 1, true, true);
+        SoundManager.instance.PlaySound("wavemusic", 0.1f, 1, true, true);
+        SoundManager.instance.StopSound("whitenoise");
 
         EnableFog();
 

@@ -103,7 +103,7 @@ public class PlayerShoot : MonoBehaviour
         pitch = Mathf.Clamp(pitch, 0.5f, 1f);
         
 
-        SoundManager.instance.PlaySound("fire", 0.6f, Random.Range(pitch - 0.1f, pitch + 0.1f), false, false);
+        SoundManager.instance.PlaySound("fire", 0.3f, Random.Range(pitch - 0.1f, pitch + 0.1f), false, false);
     }
 
     void DeactivateCooldown()

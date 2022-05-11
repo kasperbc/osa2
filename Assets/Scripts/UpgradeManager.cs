@@ -64,6 +64,8 @@ public class UpgradeManager : MonoBehaviour
                 return;
         }
 
+        SoundManager.instance.PlaySound("goal", 0.5f, 1, false, false);
+
         PlayerShoot shootComponent = GetComponent<PlayerShoot>();
 
         upgradePanel.transform.parent.GetChild(4).GetComponent<TextMeshProUGUI>().text =
@@ -179,8 +181,6 @@ public class UpgradeManager : MonoBehaviour
         upgradePanelOpen = true;
 
         RandomizeUpgradeShop();
-
-        SoundManager.instance.PlaySound("goal", 0.5f, 1, false, false);
 
         PlayerShoot _shoot = GetComponent<PlayerShoot>();
         if (_shoot.cam.rect.width == _shoot.cam.rect.height)
