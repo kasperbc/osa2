@@ -41,9 +41,14 @@ public class SoundManager : MonoBehaviour
         // Delete all sources that are not playing
         foreach (AudioSource s in sources)
         {
+            if (s.clip == null)
+            {
+                continue;
+            }
+
             if (s.clip.name == "whitenoise")
             {
-                //s.volume = 0.25f * globalVolume;
+                s.volume = 0.25f * globalVolume;
             }
         }
     }

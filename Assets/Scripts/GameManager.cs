@@ -159,11 +159,11 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator DisplayStatus(string status)
     {
-        GameObject.Find("Status").GetComponent<Text>().text = status;
+        GameObject.Find("Status").GetComponent<TextMeshProUGUI>().text = status;
 
         yield return new WaitForSeconds(5);
 
-        GameObject.Find("Status").GetComponent<Text>().text = string.Empty;
+        GameObject.Find("Status").GetComponent<TextMeshProUGUI>().text = string.Empty;
     }
 
     public void ReloadScene()
