@@ -544,6 +544,8 @@ public class GameManager : MonoBehaviour
 
         Instantiate(Resources.Load<GameObject>("Prefabs/WaveManager"));
 
+        SoundManager.instance.PlaySound("wavemusic", 0.4f, 1, true, true);
+
         EnableFog();
 
         SetLobbyUI(false);
