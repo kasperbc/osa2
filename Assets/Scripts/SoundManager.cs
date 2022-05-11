@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;      // Instance of the Sound Manager
-    public float globalVolume = 1;
+    public float globalVolume;
     void Awake()
     {
         // Set the singleton instance
@@ -105,6 +105,8 @@ public class SoundManager : MonoBehaviour
         source.Play();
 
         print("Playing sound (" + clip + ")");
+
+        print(globalVolume);
     }
 
     public void PlaySound(string clip)
@@ -156,23 +158,16 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void PlayTestSound()
+    {
+        PlaySound("fire", 0.3f, 1, false, false);
+    }
+
     /// <summary>
     /// Set the global volume of the sounds playing in percentage values (0 = 0%, 0.5 = 50%, ect).
     /// </summary>
-    public void SetGlobalVolume(float volume)
+    public void SetGlobalVolume()
     {
-        AudioSource[] sources = GetComponents<AudioSource>();
-
-        // Return if no audio sources
-        if (sources.Length == 0)
-        {
-            return;
-        }
-
-        // Set the volume of all sounds playing
-        foreach (AudioSource s in sources)
-        {
-            s.volume *= volume;
-        }
+        globalVolume = GameObject.Find("VolumeSlider").GetComponent<Slider>().value;
     }
 }

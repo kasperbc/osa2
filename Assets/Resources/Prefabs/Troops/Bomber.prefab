@@ -51,7 +51,7 @@ MonoBehaviour:
   spawnParticle: {fileID: 3390588438428353440, guid: 7af1bdc6adab57a479ec69d217357575, type: 3}
   moveSpeed: 8
   moveAnimMultiplier: 1
-  attackRange: 3
+  attackRange: 4
   attackSpeed: 1
   damage: 50
   targetsPlayer: 0
@@ -112,8 +112,8 @@ MonoBehaviour:
   dead: 0
   damageScore: 10
   stunnable: 1
-  deathSound: scream
-  deathPitch: 3
+  deathSound: explosion
+  deathPitch: 1
   spawnSound: 
   spawnPitch: 0
   damageSound: screamshort

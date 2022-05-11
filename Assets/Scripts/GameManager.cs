@@ -56,8 +56,6 @@ public class GameManager : MonoBehaviour
         SoundManager.instance.PlaySound("whitenoise", 0.2f, 1, true, false);
         SoundManager.instance.StopSound("wavemusic");
 
-        lobbyUI.Add(GameObject.Find("Volume"));
-        lobbyUI.Add(GameObject.Find("TabIndicator"));
         lobbyUI.Add(GameObject.Find("EnterStart"));
 
         invasionUI.Add(GameObject.Find("DiamondHealthBar"));
