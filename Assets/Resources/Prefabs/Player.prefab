@@ -5428,6 +5428,13 @@ MonoBehaviour:
   animationTrigger: 
   dead: 0
   damageScore: 0
+  stunnable: 0
+  deathSound: 
+  deathPitch: 0
+  spawnSound: 
+  spawnPitch: 0
+  damageSound: 
+  damagePitch: 0
 --- !u!114 &3694221769673766721
 MonoBehaviour:
   m_ObjectHideFlags: 0

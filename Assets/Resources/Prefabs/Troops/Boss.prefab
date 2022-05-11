@@ -1766,7 +1766,7 @@ MonoBehaviour:
   moveAnimMultiplier: 1
   attackRange: 3
   attackSpeed: 1.75
-  damage: 50
+  damage: 100
   targetsPlayer: 0
   playerDetectionRange: 15
   dieAfterAttack: 0
