@@ -5450,16 +5450,15 @@ MonoBehaviour:
   upgradePanel: {fileID: 0}
   upgradePanelOpen: 0
   weaponUpgradeIcons:
-  - {fileID: 21300000, guid: 463ba971ad47f034f9c0a9ea368b6a8b, type: 3}
-  - {fileID: 21300000, guid: 40abd8d871590304fa4cd60deb750dd5, type: 3}
-  - {fileID: 21300000, guid: 04d50499cad7f4b4286b9584f4d4c315, type: 3}
-  - {fileID: 21300000, guid: a16294845a5ca7447a3b1559608163f2, type: 3}
-  - {fileID: 21300000, guid: 7487a6d9a32d52745828d48f8c6e7314, type: 3}
+  - {fileID: 21300000, guid: 4440c7e3afd44b549b8e196b51b1742b, type: 3}
+  - {fileID: 21300000, guid: 9fb83a9a54b6f3c42830ed76392b908a, type: 3}
+  - {fileID: 21300000, guid: cc89692847d9bda4fafe6adb29349e02, type: 3}
+  - {fileID: 21300000, guid: 271b42ca3325ada4e9f9ed68b7a219e7, type: 3}
   statUpgradeIcons:
-  - {fileID: 21300000, guid: a95447df1b1edc443920489f7bef6c11, type: 3}
-  - {fileID: 21300000, guid: 37590817f7c276740b890d2bdf05d17d, type: 3}
-  - {fileID: 21300000, guid: d846933712bbd384e83a90efd0afd929, type: 3}
+  - {fileID: 21300000, guid: b5d55469f3d4ce64fbd604e8b998f78f, type: 3}
+  - {fileID: 21300000, guid: 3789900fc3a97fd43a8427fe4389fb7c, type: 3}
+  - {fileID: 21300000, guid: 72abf2a6c97780e4f9cb14fad0a188b9, type: 3}
   diamondUpgradeIcons:
-  - {fileID: 21300000, guid: 11d403a5f8c1ce646bfc758e66424ee3, type: 3}
-  - {fileID: 21300000, guid: 67958313e3a45784fbdb07148250a30c, type: 3}
-  - {fileID: 21300000, guid: eb3733a057394264c814fd39b7167399, type: 3}
+  - {fileID: 21300000, guid: cfd0291ee4706f942bbe062d2ea1ce2a, type: 3}
+  - {fileID: 21300000, guid: 460f43068447ee242bc5ca516cb9f53a, type: 3}
+  - {fileID: 21300000, guid: 05f2091fe6e3ab1418fd7c3476402cd4, type: 3}

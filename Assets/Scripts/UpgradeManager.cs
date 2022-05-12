@@ -6,7 +6,7 @@ using TMPro;
 
 public class UpgradeManager : MonoBehaviour
 {
-    public enum WeaponUpgrade {Basic, Multishot, RapidFire, BigBullet, Pierce, Sniper};
+    public enum WeaponUpgrade {Basic, Multishot, RapidFire, BigBullet, Pierce};
     public enum StatUpgrade {Health, Damage, FireRate};
     public enum DiamondUpgrade {EnemySlow, Heal, Thorns};
 
@@ -104,11 +104,6 @@ public class UpgradeManager : MonoBehaviour
             case WeaponUpgrade.Pierce:
                 shootComponent.pierceCount = 3;
                 break;
-            case WeaponUpgrade.Sniper:
-                shootComponent.damageMultiplier = 2;
-                shootComponent.reloadMultiplier = 1.5f;
-                shootComponent.bulletSpeedMultiplier = 2;
-                break;
         }
     }
 
@@ -154,7 +149,7 @@ public class UpgradeManager : MonoBehaviour
 
     void RandomizeUpgradeShop()
     {
-        upgrade1 = (WeaponUpgrade)Random.Range(1, 6);
+        upgrade1 = (WeaponUpgrade)Random.Range(1, 5);
         upgrade2 = (StatUpgrade)Random.Range(0, 3);
         upgrade3 = (DiamondUpgrade)Random.Range(0, 3);
     }
@@ -202,8 +197,6 @@ public class UpgradeManager : MonoBehaviour
         upgradeIcons[0].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = FormatName(upgrade1.ToString());
         upgradeIcons[2].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = FormatName(upgrade3.ToString());
         upgradeIcons[1].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = FormatName(upgrade2.ToString());
-
-        print(upgrade1);
     }
 
     string FormatName(string name)
