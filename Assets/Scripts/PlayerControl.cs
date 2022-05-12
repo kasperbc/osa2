@@ -235,6 +235,11 @@ public class PlayerControl : MonoBehaviour
 
     Vector3 GetAim()
     {
+        if (controlMethod == ControlMethod.MouseAndKeyboard && Cursor.lockState == CursorLockMode.None)
+        {
+            return Vector3.zero;
+        }
+
         Vector3 direction = Vector2.zero;
 
         switch (controlMethod)

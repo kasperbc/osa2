@@ -1826,8 +1826,8 @@ MonoBehaviour:
   dead: 0
   damageScore: 10
   stunnable: 0
-  deathSound: scream
-  deathPitch: 2.5
+  deathSound: skeletondeath
+  deathPitch: 0.8
   spawnSound: laugh
   spawnPitch: 1.25
   damageSound: screamshort

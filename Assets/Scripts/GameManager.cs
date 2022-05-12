@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour
 
     private GameObject gameOverPanel;
     private int score;
+
+    bool paused;
+    GameObject exitButton;
     void Start()
     {
         if (instance == null)
@@ -40,6 +43,10 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        paused = false;
+        exitButton = GameObject.Find("Exit");
+        exitButton.SetActive(false);
 
         // Load resources
         player = Resources.Load<GameObject>("Prefabs/Player");
@@ -93,6 +100,11 @@ public class GameManager : MonoBehaviour
 
             StopCoroutine(SpawnWave());
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace) && WaveManager.instance.upgradeInProgression == false)
+        {
+            TogglePause();
+        }
     }
 
     void ListenForStart()
@@ -118,6 +130,17 @@ public class GameManager : MonoBehaviour
                 AddPlayer(i);
             }
         }
+    }
+
+    void TogglePause()
+    {
+        paused = !paused;
+
+        Time.timeScale = (!paused).GetHashCode();
+
+        exitButton.SetActive(paused);
+
+        SetMouseLock(!paused);
     }
 
     void ListenForPlayerLeaves()
@@ -151,8 +174,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void SetMouseLock(bool locked)
+    {
+        if (locked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            cursorLocked = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            cursorLocked = false;
+        }
+    }
+
     public void LoadTitle()
     {
+        if (paused)
+        {
+            TogglePause();
+        }
+
+        SetMouseLock(false);
+
+        Destroy(SoundManager.instance.gameObject);
+
         SceneManager.LoadScene("Title");
     }
 
@@ -193,7 +239,15 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 spawnPoint = spawnedMap.GetComponent<MapData>().spawnpoints[i];
 
-                existingPlayers[i].transform.position = spawnPoint; 
+                existingPlayers[i].transform.position = spawnPoint;
+
+                GameObject camera = existingPlayers[i].GetComponent<PlayerShoot>().cam.gameObject;
+                GameObject vCam = camera.GetComponent<CinemachineBrain>().ActiveVirtualCamera.VirtualCameraGameObject;
+
+                Collider bounds = GameObject.Find("Bounds").GetComponent<Collider>();
+                vCam.GetComponent<CinemachineConfiner>().m_BoundingVolume = bounds;
+
+                print(bounds);
             }
         }
         else

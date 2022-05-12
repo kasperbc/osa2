@@ -105,8 +105,6 @@ public class SoundManager : MonoBehaviour
         source.Play();
 
         print("Playing sound (" + clip + ")");
-
-        print(globalVolume);
     }
 
     public void PlaySound(string clip)

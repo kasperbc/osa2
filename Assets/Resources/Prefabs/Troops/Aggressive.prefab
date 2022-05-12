@@ -113,7 +113,7 @@ MonoBehaviour:
   damageScore: 10
   stunnable: 1
   deathSound: scream
-  deathPitch: 3
+  deathPitch: 1
   spawnSound: 
   spawnPitch: 0
   damageSound: screamshort
